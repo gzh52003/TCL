@@ -1,5 +1,5 @@
 <template>
-  <div>list
+  <div>list略略略
       
   </div>
 </template>
