@@ -7,7 +7,10 @@ import User from '../pages/User.vue'
 import List from '../pages/List.vue'
 import Order from '../pages/Order.vue'
 import Nofund from '../pages/Nofund.vue'
-
+import Edit from '../pages/user/Edit.vue'
+import Add from '../pages/user/Add.vue'
+import Reg from '../pages/Reg.vue'
+import Login from '../pages/Login.vue'
 
 
 // 使用VueRouter（插件都要使用）
@@ -21,21 +24,46 @@ const router=new VueRouter({
             component: Home
         },
         {
+            path: '/reg',
+            component: Reg 
+        },
+        {
+            path: '/login',
+            component: Login 
+        },
+        {
             path: '/home',
-            component: Home
+            component: Home,
+        
+            children:[
+               
+                {
+                    name:"user",
+                    path: '/user',
+                    component: User      
+                },
+                {
+                    name:'userEdit',
+                    path: '/edit/:id',
+                    component: Edit
+                },
+                {
+                    name:"add",
+                    path: '/add',
+                    component: Add      
+                },
+                {
+                    path: '/list',
+                    component: List
+                },
+                {
+                    path: '/order',
+                    component: Order
+                },
+            ]
+            
         },
-        {
-            path: '/user',
-            component: User
-        },
-        {
-            path: '/list',
-            component: List
-        },
-        {
-            path: '/order',
-            component: Order
-        },
+       
         {
             path: '/404',
             component: Nofund

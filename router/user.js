@@ -1,6 +1,6 @@
 const express=require("express")
 const router=express.Router();
-const query=require("../data/sql");
+// const query=require("../data/sql");
 const token=require("../data/token");
 // 注册
 router.post("/reg",async(req,res)=>{
