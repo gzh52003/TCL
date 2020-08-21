@@ -39,7 +39,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <div style="padding:15px 0;">
+        <div>
           <router-view />
         </div>
       </el-main>
