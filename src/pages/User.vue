@@ -63,9 +63,17 @@ export default {
       console.log(index, row);
       if (confirm("是否确定删除")) {
         let id = row._id;
-        var { data } = await this.$request.delete("/mongoUser/" + id);
-        this.userlist = this.userlist.filter((item) => item._id !== id);
-        console.log(data);
+        let {data}=await this.$request.delete("/mongoUser/" + id);
+        console.log(data)
+        if(data.code==1){
+            // this.userlist = this.userlist.filter((item) => item._id !== id);
+            alert(data.msg)
+            this.fetchall();
+        }
+        else if(data.code==2){
+                alert(data.msg)
+        }
+        // console.log(data);
       }
     },
     // 分页
@@ -83,14 +91,14 @@ export default {
     async fetchall() {
       let page = this.page;
       let size = this.pagesize;
-      console.log(page, size, 666);
+      // console.log(page, size, 666);
       const { data } = await this.$request.get("/mongoUser/select", {
         params: {
           page,
           size,
         },
       });
-      console.log(data, 999);
+      // console.log(data, 999);
       this.userlist = data.data;
       this.total = data.total;
     },
