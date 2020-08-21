@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Home from '../pages/Home.vue'
 import User from '../pages/User.vue'
 import List from '../pages/List.vue'
+import AlterGoods from '../pages/list/alterGoods.vue'
 import Order from '../pages/Order.vue'
 import Nofund from '../pages/Nofund.vue'
 import Edit from '../pages/user/Edit.vue'
@@ -34,7 +35,6 @@ const router=new VueRouter({
         {
             path: '/home',
             component: Home,
-        
             children:[
                
                 {
@@ -54,7 +54,11 @@ const router=new VueRouter({
                 },
                 {
                     path: '/list',
-                    component: List
+                    component: List,
+                },
+                {//修改商品资料时从List组件跳转到alterGoods组件
+                    path: '/list/alterGoods/:id',
+                    component: AlterGoods,
                 },
                 {
                     path: '/order',
