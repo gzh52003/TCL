@@ -1,14 +1,20 @@
 <template>
   <div>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item label="查询用户">
+    <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+</el-form>
     <el-button type="primary" @click.native="change()">新增用户</el-button>
+
     <el-table :data="userlist" style="width: 100%">
       <el-table-column label="Name" prop="username"></el-table-column>
       <el-table-column label="Gender" prop="gender"></el-table-column>
       <el-table-column label="Age" prop="age"></el-table-column>
       <el-table-column align="right">
-        <template v-slot:="scope">
-          <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-        </template>
         <template v-slot:="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -39,9 +45,23 @@ export default {
       pagesize: 10, //一页多少条
       total: 0, //总条数
       pages: 0, //总页数
+
+       formInline: {
+          user: '',
+          region: ''
+        }
     };
   },
   methods: {
+    async onSubmit() {
+        let {user}=this.formInline
+           let {data}=await this.$request.get("/mongoUser/ss",{
+             params:{
+               user
+             }
+           });
+           console.log(data)
+      },
     change(){
       // 新增用户
        this.$router.push({

@@ -6,7 +6,8 @@
           <i class="el-icon-camera"></i>TCL后台管理系统
         </el-col>
         <el-col :span="12" style="text-align:right">
-          <div id="username"></div>
+          <span id="span1">欢迎登录：{{username}}</span>
+          <el-button type="danger" style="width:50px text-align:center" @click.native="goout()">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -61,12 +62,16 @@
   </el-container>
 </template>
 
+
+
 <script>
+
 export default {
   name: "App",
   data() {
     return {
       
+      username:"",
       openMenu: [],
       menu: [
         {
@@ -94,7 +99,36 @@ export default {
       current: 0,
     };
   },
-
+  async created(){
+    let currentUser=localStorage.getItem("currentUser")
+    currentUser=JSON.parse(currentUser)
+    // 没有localstorage直接结束并回到登录界面
+    if(!currentUser){
+      this.$router.push("/login");
+      return
+    }else{
+      // token解密不通过删除。通过则显示用户名
+        const {data} = await this.$request.get('/jwtverify',{
+          params:{
+            authorization:currentUser.authorization
+          }
+        })
+        console.log(data)
+        console.log(data.code)
+        // 通过
+        if (data.code == 1) {
+                      this.username=currentUser.username
+                      console.log(this.username)
+                }
+                // 不通过
+                else{
+                    localStorage.removeItem('currentUser');
+                    this.$router.push("/login");
+                   
+                }
+    }
+   
+  },
   methods: {
     goto(path, idx) {
       console.log(this.$router);
@@ -105,8 +139,15 @@ export default {
     changeMenu(path) {
       this.activeIndex = path;
     },
+    // 退出
+    goout(){
+                    localStorage.removeItem('currentUser');
+                    this.$router.push("/login");
+    }
   },
-};
+  
+}
+    
 </script>
 
 
@@ -145,6 +186,9 @@ html {
 }
 #app {
   height: 100%;
+}
+#span1{
+  margin-right: 50px;
 }
 </style>
 

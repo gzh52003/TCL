@@ -99,7 +99,16 @@ export default {
       }
     }
   },
-};
+
+  created(){
+    // 如果存在，则免登陆
+    let currentUser=localStorage.getItem("currentUser")
+    currentUser=JSON.parse(currentUser)
+    if(currentUser){
+      this.$router.push("/home");
+    }
+  }
+}
 </script>
 
 <style scoped>

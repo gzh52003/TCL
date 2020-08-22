@@ -10,7 +10,7 @@
         class="demo-ruleForm"
       >
         <el-form-item label="账号" prop="username">
-          <el-input v-model="ruleForm.username"></el-input>
+          <el-input v-model="ruleForm.username" @change="change()"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="ruleForm.password"  @keyup.13.native="submitForm('ruleForm')"></el-input>
@@ -32,6 +32,7 @@ export default {
       ruleForm: {
         username: "",
         password: "",
+        flag:""
       },
     //  验证规则
       rules: {
@@ -45,8 +46,36 @@ export default {
 
 
   methods: {
+    //   判断用户名是否存在
+    async change(){
+        let {username}=this.ruleForm
+         let {data}=await this.$request.get("/mongoUser/check",{
+                       params:{
+                            username
+                       }            
+                });
+                // 用户名可以使用
+        if(data.code===1){
+            this.flag=true
+
+            // 用户名已存在
+        }else if(data.code===0){
+            this.flag=false
+            this.$message({
+                          message: data.msg,
+                        });
+        }
+        console.log(this.flag)
+    },
     //   登录
     submitForm(formName) {
+        // 如果用户名已存在，结束函数
+        if(!this.flag){
+            this.$message({
+                          message: "用户名已存在，请重新注册",
+                        });
+            return
+        }
         // 判断验证是否通过  
         this.$refs[formName].validate(async valid => {
             if(valid){
@@ -54,18 +83,17 @@ export default {
                 // console.log(ruleForm)
                 let username=this.ruleForm.username
                 let password=this.ruleForm.password
-                let {data}=await this.$request.post("/mongoUser/login",{
+                let {data}=await this.$request.post("/mongoUser/reg",{
                         username,password             
                 });
-                console.log(data)
+                // console.log(data)
+                // console.log(data.code)
                 // 成功
                 if(data.code==1){
-                    // 设置localstroage
-                     localStorage.setItem("currentUser", JSON.stringify(data.data))
                     this.$message({
                             message: data.msg,
                         });
-                    this.$router.push("/home");
+                    this.$router.push("/login");
                     // 失败
                 }else if(data.code==2){
                         this.$message({
@@ -81,9 +109,9 @@ export default {
           
     
     },
-    // 点击注册
+    // 点击登录
     gotoReg() {
-      this.$router.push("/reg");
+      this.$router.push("/login");
     },
   },
 };

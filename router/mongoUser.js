@@ -157,4 +157,66 @@ router.put('/:id', async (req, res) => {
 
 
 })
+
+// 模糊查询
+// router.get("/ss",async (req,res)=>{
+// //    //1、创建查询条件query
+// //    var query={};
+// //    //2、判断是否获取到参数，get方法请使用req.query.proname
+        
+// //    //3、添加匹配规则，创建查询条件
+// //           query['username']=new RegExp(req.query.name);//模糊查询参数
+// //          //多个条件时依次添加即可
+// //          //查询字段为数字时，req.body.number获取的类型为字符串，需注意是否与数据库相应字段类型保持一致
+        
+// //     //    operate("find","collectionName",query,function(result){
+// //     //        console.log(result);
+// //     //        res.send(result);
+// //     //    })
+// //     let result = await mongo.find("some",query)
+// //     console.log(result,123)
+//             let {name} = req.query
+//             console.log(name)
+//             // var str=".*"+name+".*$"
+//             // var reg = new RegExp(str)
+//             // let result = await mongo.find("some",{"username":reg})
+//             // console.log(result,123)
+// })
+// router.get('/ss', async (req, res) => {
+//     // console.log(req)
+//     // const { user } = req.query
+//     // console.log(user)
+//     // let result=await mongo.find("some",{username:user})
+//     // console.log(result)
+//     // res.send({data:result})
+//     let { username } = req.query;
+//     console.log(username,1)
+//     let result = await mongo.find("some", { username })
+//     console.log(result,123)
+//     if (result.length > 0) {
+//         // res.send({ "type": "err", "msg": "用户名已存在" })
+//         res.send(formatData({code:0}))
+//     } else {
+//         // res.send({ "type": "sucess", "msg": "√" })
+//         res.send(formatData())
+//     }
+// })
+
+
+
+
+router.get("/ss", async (req, res) => {
+    let { user } = req.query;
+    console.log(user,1)
+    let result = await mongo.find("some", { username:user })
+    console.log(result,123)
+    if (result.length > 0) {
+        // res.send({ "type": "err", "msg": "用户名已存在" })
+        res.send(formatData({code:0}))
+    } else {
+        // res.send({ "type": "sucess", "msg": "√" })
+        res.send(formatData())
+    }
+})
+
 module.exports = router
