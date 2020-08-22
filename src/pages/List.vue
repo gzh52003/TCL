@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:relative;top:-33px">
     <h1>商品管理</h1>
     <el-table :data="goodslist" style="width: 100%" height="400">
       <!-- 勾选框 -->
@@ -18,11 +18,27 @@
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <!-- {{scope.row}} -->
-          <el-button type="text" size="small">查看</el-button>
+          <el-button
+            type="text"
+            size="small"
+            v-on:click="deleteGoods(scope.row._id,scope.row.name)"
+          >删除</el-button>
           <el-button type="text" size="small" v-on:click="gotoAlterGoods(scope.row._id)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pages"
+        :page-sizes="[5, 10, 20, 40]"
+        :page-size="size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -31,19 +47,104 @@ export default {
   data() {
     return {
       goodslist: [],
+      page: 1, //当前页
+      size: 10, //一页多少条
+      total: 0, //总条数
+      pages: 0, //总页数
     };
   },
   methods: {
+    //编辑数据
     gotoAlterGoods(id) {
-      
-      this.$router.push("/list/alterGoods/"+id);
+      this.$router.push("/list/alterGoods/" + id);
+    },
+    //删除数据
+    deleteGoods(id, name) {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: "警告！",
+        message: h("p", null, [
+          h("span", null, "确定要删除 "),
+          h("i", { style: "color: teal" }, name),
+        ]),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        beforeClose: (action, instance, done) => {
+          if (action === "confirm") {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = "执行中...";
+            setTimeout(() => {
+              done();
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
+            }, 2000);
+          } else {
+            done();
+          }
+        },
+      }).then(async () => {
+        //删除数据
+        console.log(id);
+        const { data } = await this.$request.delete("/good/" + id);
+        if (data.code === 1) {
+          //重新渲染
+          this.goodslist = this.goodslist.filter((item) => item._id !== id);
+          this.$message({
+            type: "info",
+            message: "删除成功" + name + "的数据",
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: "删除失败",
+          });
+        }
+      });
+    },
+    // 分页
+    handleSizeChange(val) {
+
+      this.size = val; //每页多少条
+      this.page = 1; //如果切换每页多少条，回到第一页开始看
+      this.fetchall();
+    },
+    handleCurrentChange(val) {
+
+      this.page = val;
+      this.fetchall();
+    },
+    async fetchall() {
+      let page = this.page;
+      let size = this.size;
+
+      const { data } = await this.$request.get("/good", {
+        params: {
+          page,
+          size,
+        },
+      });
+
+      this.goodslist = data.data;
+     
     },
   },
   async created() {
     //创建阶段发送请求获取商品数据
-    let { data } = await this.$request.get("/good");
+    let dataMany=await this.$request.get("/good/many")
+    let { data } = await this.$request.get("/good", {
+      params: {
+        page: this.page,
+        size: this.size,
+      },
+    });
+
     // 把数据存入goodslist中
-    this.goodslist = data.result;
+    this.goodslist = data.data;
+    this.total=dataMany.data.data.length
+
   },
 };
 </script>

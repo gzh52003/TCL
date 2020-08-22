@@ -1,47 +1,99 @@
 <!-- 商品资料修改 -->
 <template>
-  <el-form
-    :model="ruleForm"
-    status-icon
-    :rules="rules"
-    ref="ruleForm"
-    label-width="100px"
-    class="demo-ruleForm"
-  >
-    <el-form-item label="商品名称" >
-      <el-input type="text" disabled="" :value="name"></el-input>
-    </el-form-item>
-    <el-form-item label="商品价格" prop="checkPass">
-      <el-input type="text" v-model="ruleForm.checkPass" value=""></el-input>
-    </el-form-item>
-
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
-      <el-button @click="resetForm('ruleForm')">还原</el-button>
-    </el-form-item>
-  </el-form>
+  <el-row>
+    <el-col :span="12">
+      <el-form
+        :model="ruleForm"
+        status-icon
+        ref="ruleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+        :rules="rules"
+      >
+        <el-form-item label="商品名称">
+          <el-input type="text" disabled v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="商品价格" prop="price">
+          <el-input type="text" v-model.number="ruleForm.price"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+    <el-col :span="12" style="text-align:center">
+      <img :src="ruleForm.pic" alt width="180" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 export default {
   data() {
-      return{
-          ruleForm:{
-              name:"",
-              price:""
+    //自定义校验规则
+      var checkPrice = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('价格不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value < 0) {
+              callback(new Error('必须为正数'));
+            } else {
+              callback();
+            }
           }
-      }
+        }, 1000);
+      };
+    return {
+      goodsId:'',
+      ruleForm: {
+        name: "",
+        price: "",
+      },
+      //校验规则目录
+      rules: {
+        price: [{ validator: checkPrice, trigger: "blur" }],
+      },
+    };
   },
   methods: {
+    submitForm(formName) {
+    this.$refs[formName].validate(async(valid) => {
+        // 全校验通过执行
+        if (valid) {
+          // alert("submit!");
+          const {goodsId,ruleForm}=this;
+          const {data}=await this.$request.put("/good/"+goodsId,{
+            ...ruleForm
+          });console.log(data);
+          if(data.code===1){
+            this.$message({
+              type:'success',
+              message:'修改成功'
+            })
+          }else{
+            this.$message({
+              type:'fail',
+              message:'修改失败'
+            })
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
   },
-  async created(){
-      const {id}=this.$route.params
-      console.log(id);
-      let { data } = await this.$request.get("/good/"+id);
-      this.ruleForm={
-          name:data.name
-      }
-  }
+  async created() {
+    const { id } = this.$route.params;
+    this.goodsId=id
+    let { data } = await this.$request.get("/good/" + id);
+    Object.assign(this.ruleForm, data.data);
+    console.log(this.ruleForm);
+  },
 };
 </script>
 
