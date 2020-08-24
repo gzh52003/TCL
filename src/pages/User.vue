@@ -23,7 +23,7 @@
       <el-table-column label="photo" prop="photo">
         <template slot-scope="scope">
                         <!-- scope指整个数据对象。scope.row指当前行数据 -->
-                        <img :src="'http://localhost:5000'+scope.row.avatarUrl" alt style="width:50px;height:50px;" />
+                        <img :src="'http://localhost:5000/public'+scope.row.avatarUrl" alt style="width:50px;height:50px;" />
                     </template>
         </el-table-column>
       <el-table-column align="right">

@@ -107,7 +107,7 @@ export default {
                 ).then(res=>res.json())
                 console.log(result)
                 console.log(result.data.avatarUrl)
-                this.imgsrc=" http://localhost:5000"+result.data.avatarUrl;
+                this.imgsrc="http://localhost:5000/public"+result.data.avatarUrl;
                   console.log(this.imgsrc)
     },
     submitForm(formName) {
