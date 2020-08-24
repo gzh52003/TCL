@@ -40,9 +40,9 @@ router.get('/:id',async(req,res)=>{
 router.put('/:id',async(req,res)=>{
     const {id}=req.params
     //获取要修改的属性
-    const {price}=req.body
+    const {price,pic}=req.body
 
-    let newData={price}
+    let newData={price,pic}
 
     try{
        
