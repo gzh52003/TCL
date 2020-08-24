@@ -7,7 +7,7 @@ const { MongoClient,ObjectId } = require('mongodb');
 const url = 'mongodb://localhost:27017';
 
 // 数据库名称
-const dbName = '2003';
+const dbName = 'VueObject';
 
 
 async function connect(){
@@ -73,12 +73,11 @@ async function update(colName,query,newData){ // newData{$set:{price:200,qty:2},
 // 查
 async function find(colName,query={},options={}){ // options={litmit:10,skip:0}
     const {client,db} = await connect();
-    
     const collection = db.collection(colName);
     if(query._id && typeof query._id === 'string'){
         query._id = ObjectId(query._id);
     }
-
+    
     // 查询到数据集合
     let result = collection.find(query); // 50->10
 
