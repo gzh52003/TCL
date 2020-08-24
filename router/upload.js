@@ -30,7 +30,7 @@ const uploadMiddleware = multer({ storage });
 router.post('/avatar', uploadMiddleware.single('avatar'), (req, res) => {
     // 中间件会把图片信息格式化到req.file,req.files
     const { _id } = req.body;
-    console.log(_id)
+    console.log("id",_id)
     console.log('file=', req.file, req.body);
     
 

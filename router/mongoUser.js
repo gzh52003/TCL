@@ -5,11 +5,16 @@ const crypto = require('crypto');
 const token = require("../data/token");
 const {formatData} = require('./tools');
 
+
+
+
+
+
 router.get("/check", async (req, res) => {
     let { username } = req.query;
-    console.log(username,1)
+    // console.log(username,1)
     let result = await mongo.find("some", { username })
-    console.log(result,123)
+    // console.log(result,123)
     if (result.length > 0) {
         // res.send({ "type": "err", "msg": "用户名已存在" })
         res.send(formatData({code:0}))
@@ -47,14 +52,14 @@ router.post("/login", async (req, res) => {
     const hash = crypto.createHash("sha256");
     hash.update(password + "xiaowei");
     password = hash.digest("hex");
-    console.log(password,23)
+    // console.log(password,23)
     let result = await mongo.find("some", { username, password })
     if (result.length > 0) {
         // 判断是否勾选免登陆
         let authorization;
-        if (checked == "true") {
+        if (checked) {
             // 创建token
-            authorization = token.create({ username }, 10000)
+            authorization = token.create({ username }, "148h")   
 
         } else {
             authorization = token.create({ username })
@@ -108,9 +113,11 @@ router.delete('/:id', async (req, res) => {
 //     }
 
 // })
+
+
 // 获取所有用户信息
 router.get("/select", async (req, res) => {
-    console.log(req.query,666777)
+    // console.log(req.query,666777)
     let { page, size, sort = "add_time" } = req.query;
     // console.log(page,size,666)
     const skip = (page - 1) * size; //0
@@ -126,13 +133,32 @@ router.get("/select", async (req, res) => {
     // console.log(result2,999)
     res.send({ data: result, num,total , page, size})
 })
+// 模糊查询
+router.get("/vague",async (req,res)=>{
+    let {name} = req.query
+    // 在nodejs使用mogo的模糊查询必须使用构造函数的正则表达式，不能使用//
+    var str=".*"+name+".*$"
+    var reg = new RegExp(str)
+    let result = await mongo.find("some",{"username":reg})
+    // console.log(result,123)
+    if (result.length > 0) {
+        // res.send({ "type": "err", "msg": "用户名已存在" })
+        res.send(formatData({data:result}))
+    } else {
+        // res.send({ "type": "sucess", "msg": "√" })
+        res.send(formatData())
+    }
+})
 // 获取单个用户信息、
 router.get('/:id', async (req, res) => {
+    // console.log(22222222)
     const { id } = req.params; console.log('id=', id)
     const result = await mongo.find('some', { _id: id });
     // console.log(result)
     res.send({ data: result[0] });
 })
+
+
 // 更改
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
@@ -147,7 +173,7 @@ router.put('/:id', async (req, res) => {
     }
 
     try {
-        console.log(newData)
+        // console.log(newData)
         await mongo.update('some', { _id: id }, { $set: newData });
         res.send({ data: { _id: id, ...newData } })
     } catch (err) {
@@ -158,65 +184,12 @@ router.put('/:id', async (req, res) => {
 
 })
 
-// 模糊查询
-// router.get("/ss",async (req,res)=>{
-// //    //1、创建查询条件query
-// //    var query={};
-// //    //2、判断是否获取到参数，get方法请使用req.query.proname
-        
-// //    //3、添加匹配规则，创建查询条件
-// //           query['username']=new RegExp(req.query.name);//模糊查询参数
-// //          //多个条件时依次添加即可
-// //          //查询字段为数字时，req.body.number获取的类型为字符串，需注意是否与数据库相应字段类型保持一致
-        
-// //     //    operate("find","collectionName",query,function(result){
-// //     //        console.log(result);
-// //     //        res.send(result);
-// //     //    })
-// //     let result = await mongo.find("some",query)
-// //     console.log(result,123)
-//             let {name} = req.query
-//             console.log(name)
-//             // var str=".*"+name+".*$"
-//             // var reg = new RegExp(str)
-//             // let result = await mongo.find("some",{"username":reg})
-//             // console.log(result,123)
-// })
-// router.get('/ss', async (req, res) => {
-//     // console.log(req)
-//     // const { user } = req.query
-//     // console.log(user)
-//     // let result=await mongo.find("some",{username:user})
-//     // console.log(result)
-//     // res.send({data:result})
-//     let { username } = req.query;
-//     console.log(username,1)
-//     let result = await mongo.find("some", { username })
-//     console.log(result,123)
-//     if (result.length > 0) {
-//         // res.send({ "type": "err", "msg": "用户名已存在" })
-//         res.send(formatData({code:0}))
-//     } else {
-//         // res.send({ "type": "sucess", "msg": "√" })
-//         res.send(formatData())
-//     }
-// })
 
 
 
 
-router.get("/ss", async (req, res) => {
-    let { user } = req.query;
-    console.log(user,1)
-    let result = await mongo.find("some", { username:user })
-    console.log(result,123)
-    if (result.length > 0) {
-        // res.send({ "type": "err", "msg": "用户名已存在" })
-        res.send(formatData({code:0}))
-    } else {
-        // res.send({ "type": "sucess", "msg": "√" })
-        res.send(formatData())
-    }
-})
+
+
+
 
 module.exports = router

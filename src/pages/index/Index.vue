@@ -113,12 +113,12 @@ export default {
             authorization:currentUser.authorization
           }
         })
-        console.log(data)
-        console.log(data.code)
+        // console.log(data)
+        // console.log(data.code)
         // 通过
         if (data.code == 1) {
                       this.username=currentUser.username
-                      console.log(this.username)
+                      // console.log(this.username)
                 }
                 // 不通过
                 else{
@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     goto(path, idx) {
-      console.log(this.$router);
+      // console.log(this.$router);
       this.$router.push(path);
       // this.$router.replace(path);
       this.currentIndex = idx;

@@ -34,6 +34,7 @@ export default {
         password: "",
         flag:""
       },
+     
     //  验证规则
       rules: {
         username: [
@@ -46,6 +47,7 @@ export default {
 
 
   methods: {
+   
     //   判断用户名是否存在
     async change(){
         let {username}=this.ruleForm
