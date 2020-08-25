@@ -13,7 +13,15 @@
           <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="ruleForm.password"  @keyup.13.native="submitForm('ruleForm')"></el-input>
+          <el-input
+            type="password"
+            v-model="ruleForm.password"
+            @keyup.13.native="submitForm('ruleForm')"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="验证码" prop="vcode">
+          <el-input v-model="ruleForm.vcode" placeholder="请输入验证码" style="width:150px"></el-input>
+          <span ref="vcode" class="vcode" @click="change()"></span>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="ruleForm.checked" @click.native="keep($event)">保留7天免登陆</el-checkbox>
@@ -35,7 +43,8 @@ export default {
       ruleForm: {
         username: "",
         password: "",
-        checked: true
+        checked: true,
+        vcode:""
       },
     //  验证规则
       rules: {
@@ -49,34 +58,50 @@ export default {
 
 
   methods: {
+    // 点击切换验证码
+    async change(){
+         let {data}=await this.$request.get("vcode")
+         this.$refs.vcode.innerHTML=data.data 
+    },
     //   登录
     submitForm(formName) {
         // 判断验证是否通过  
         this.$refs[formName].validate(async valid => {
             if(valid){
-                //  let {ruleForm}=this
-                // console.log(ruleForm)
                 let username=this.ruleForm.username
                 let password=this.ruleForm.password
                 let checked=this.ruleForm.checked
+                let vcode=this.ruleForm.vcode
+              // 发送登录请求
                 let {data}=await this.$request.post("/mongoUser/login",{
-                        username,password,checked             
+                        username,password,checked,vcode,                                  
                 });
-                console.log(data)
+                if(data.code===3){
+                  this.$message({
+                    message: "验证码错误",
+                  })
+                  // 刷新验证码
+                  this.change()
+                  // 验证码不匹配结束函数
+                  return
+                }
+                // 登录成功
                 if(data.code==1){
                      localStorage.setItem("currentUser", JSON.stringify(data.data))
                     this.$message({
                             message: data.msg,
                         });
                     this.$router.push("/home");
-                }else if(data.code==2){
+                }else if(data.code==2){//密码或用户名错误
                         this.$message({
                             message: "账号或密码错误",
                         });
                         return
                 }
                 
-            }else{
+            }
+            // 验证不通过结束函数
+            else{
                 return false
             }
         })
@@ -84,7 +109,7 @@ export default {
     
     },
     // 点击注册
-    gotoReg() {
+    gotoReg(){
       this.$router.push("/reg");
     },
     // 判断有没勾选免登陆
@@ -96,17 +121,18 @@ export default {
           message: "请不要在公共场合使用该功能",
           type: "warning"
         });
-      }
-    }
+      } 
   },
-
-  created(){
+},
+  async created(){
     // 如果存在，则免登陆
     let currentUser=localStorage.getItem("currentUser")
     currentUser=JSON.parse(currentUser)
     if(currentUser){
       this.$router.push("/home");
     }
+    this.change()
+ 
   }
 }
 </script>
@@ -114,7 +140,7 @@ export default {
 <style scoped>
 .login-form {
   width: 350px;
-  height: 300px;
+  height: 345px;
   /* 上下间隙150px, 左右自动 */
   /*透明背景色*/
   background-color: rgb(255, 255, 255, 0.8);
@@ -149,5 +175,9 @@ export default {
 }
 .el-checkbox {
   margin-left: -35px;
+}
+.vcode {
+  position: absolute;
+  margin-left: 10px;
 }
 </style>

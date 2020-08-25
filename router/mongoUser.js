@@ -45,10 +45,13 @@ router.post("/reg", async (req, res) => {
 // 登录
 router.post("/login", async (req, res) => {
     let { username, password, checked, vcode } = req.body;
-    // if (vcode != req.session.vcode) {
-    //     res.send({ "type": "error11", "msg": "验证码错误" })
-    //     return
-    // }
+    console.log(vcode)
+    console.log(req.session.vcode)
+    if (vcode != req.session.vcode) {
+        // res.send({ "type": "error11", "msg": "验证码错误" })
+        res.send(formatData({code:3,msg:"验证码错误"}))
+        return
+    }
     const hash = crypto.createHash("sha256");
     hash.update(password + "xiaowei");
     password = hash.digest("hex");
@@ -180,8 +183,6 @@ router.put('/:id', async (req, res) => {
         // console.log('err=',err);
         res.send({ "type": "err", "msg": "更改失败" })
     }
-
-
 })
 
 

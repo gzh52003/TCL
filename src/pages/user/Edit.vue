@@ -22,7 +22,7 @@
         <el-input v-model.number="ruleForm.age"></el-input>
       </el-form-item>
     
-       <img :src="imgsrc" alt="" class="imgbox">
+       <img :src="avatarUrl" alt="" class="imgbox" prop="ruleForm.avatarUrl">
        <p><input type="file" @change="change"></p>
          <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -72,7 +72,7 @@ export default {
     };
     return {
       // 图片上传
-      imgsrc:"",
+      avatarUrl:"",
       id:"",
       path: "/user",
       component: "",
@@ -94,40 +94,36 @@ export default {
     // 图片上传
     async change(e){
                 let _id=this.id
-                console.log(_id);
                 // 创建一个用户存放数据的容器
-                const data = new FormData();
-                data.append('avatar',e.target.files[0]);
-                data.append('_id',_id);
-                console.log(data)
-                const result = await fetch('http://localhost:5000/upload/avatar',{
-                    method:"post",
-                    body: data                         
-                }
-                ).then(res=>res.json())
-                console.log(result)
-                console.log(result.data.avatarUrl)
-                this.imgsrc="http://localhost:5000/public"+result.data.avatarUrl;
-                  console.log(this.imgsrc)
+                const form = new FormData();
+                form.append('avatar',e.target.files[0]);
+                form.append('_id',_id);
+                let {data}=await this.$request.post("/upload/avatar", form,{
+                  "Content-Type": "multipart/form-data",
+                })
+                this.avatarUrl=data.data.avatarUrl;
     },
     submitForm(formName) {
+      // 验证规则
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           const { ruleForm } = this;
-          console.log(this);
           const { _id } = ruleForm;
-          console.log(_id);
           console.log(ruleForm);
-          const { data } = await this.$request.put("/mongoUser/" + _id, {
+          let { data } = await this.$request.put("/mongoUser/" + _id, {
             ...ruleForm,
           });
           console.log(data);
-          alert("修改成功");
+          this.$message({
+           message:"修改成功"
+         })
           this.$router.push({
             name: "user",
           });
         } else {
-          console.log("error submit!!");
+          this.$message({
+           message:"修改失败"
+         })
           return false;
         }
       });
@@ -136,10 +132,11 @@ export default {
   async created() {
     let { id } = this.$route.params;
     const { data } = await this.$request.get("/mongoUser/" + id);
+    console.log(data)
     this.id=id
     Object.assign(this.ruleForm, data.data);
-
-    // console.log(id)
+    console.log(this.avatarUrl)
+    console.log(this.username)
   },
 };
 </script>

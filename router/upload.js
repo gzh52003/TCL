@@ -35,7 +35,7 @@ router.post('/avatar', uploadMiddleware.single('avatar'), (req, res) => {
     
 
     // 更新用户信息
-    const avatarUrl = '/uploads/' + req.file.filename
+    const avatarUrl = 'http://localhost:5000/public/uploads/' + req.file.filename
     mongo.update('some', { _id }, { $set: { avatarUrl } })
 
     res.send({data:{ _id, avatarUrl } });
