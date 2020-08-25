@@ -1,9 +1,37 @@
 <template>
   <div style="position:relative;top:-33px">
-    <h1>商品管理</h1>
-    <el-table :data="goodslist" style="width: 100%" height="400">
+    <el-row>
+      <el-col :span="12">
+        <h1>商品管理</h1>
+      </el-col>
+      <el-col :span="12">
+        <el-form
+          :inline="true"
+          :model="formInline"
+          class="demo-form-inline"
+          style="padding:11px 0;height:40px"
+        >
+          <el-form-item label="查询商品">
+            <el-input
+              v-model="formInline.name"
+              placeholder="请输入商品姓名"
+              @keyup.enter.native="onSubmit"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+  
+    <el-table :data="goodslist" style="width: 100%" height="400" >
       <!-- 勾选框 -->
-      <el-table-column type="selection" width="55"></el-table-column>
+
+           <!-- <el-table-column type="selection" width="55">
+          </el-table-column>  -->
+    
+
       <!-- 商品图片 -->
       <el-table-column prop="pic" label="#" width="180">
         <template slot-scope="scope">
@@ -17,7 +45,6 @@
 
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <!-- {{scope.row}} -->
           <el-button
             type="text"
             size="small"
@@ -37,6 +64,7 @@
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
+        style="text-align:center"
       ></el-pagination>
     </div>
   </div>
@@ -51,9 +79,25 @@ export default {
       size: 10, //一页多少条
       total: 0, //总条数
       pages: 0, //总页数
+      formInline: {
+        name: "",
+      },
     };
   },
   methods: {
+  
+    // 模糊查询
+    async onSubmit() {
+      console.log(1);
+      let { name } = this.formInline;
+      let { data } = await this.$request.get("/good/vague", {
+        params: {
+          name,
+        },
+      });
+      this.total = data.data.length;
+      this.goodslist = data.data;
+    },
     //编辑数据
     gotoAlterGoods(id) {
       this.$router.push("/list/alterGoods/" + id);
@@ -106,13 +150,11 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-
       this.size = val; //每页多少条
       this.page = 1; //如果切换每页多少条，回到第一页开始看
       this.fetchall();
     },
     handleCurrentChange(val) {
-
       this.page = val;
       this.fetchall();
     },
@@ -128,12 +170,11 @@ export default {
       });
 
       this.goodslist = data.data;
-     
     },
   },
   async created() {
     //创建阶段发送请求获取商品数据
-    let dataMany=await this.$request.get("/good/many")
+    let dataMany = await this.$request.get("/good/many");
     let { data } = await this.$request.get("/good", {
       params: {
         page: this.page,
@@ -143,8 +184,9 @@ export default {
 
     // 把数据存入goodslist中
     this.goodslist = data.data;
-    this.total=dataMany.data.data.length
-
+    this.total = dataMany.data.data.length;
+    console.log(this.goodslist);
+    
   },
 };
 </script>
