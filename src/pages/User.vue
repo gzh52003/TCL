@@ -7,7 +7,7 @@
       style="display:inline-block"
     >
       <el-form-item label="查询用户">
-        <el-input v-model="formInline.user" placeholder="请输入姓名"></el-input>
+        <el-input v-model="formInline.user" placeholder="请输入姓名" @keyup.13.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
