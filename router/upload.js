@@ -50,7 +50,7 @@ router.put('/goods', uploadMiddleware.single('goods'), (req, res) => {
     
 
     // 更新商品信息
-    const goodsUrl = 'http://120.25.229.45:5000'+'/public/uploads/' + req.file.filename
+    const goodsUrl = 'http://localhost:5000'+'/public/uploads/' + req.file.filename
     try{
         //有goodsUrl属性则改变goodsUrl属性，没有则给数据添加goodsUrl属性并赋值
        mongo.update('Goods', { _id }, { $set: { goodsUrl } })
