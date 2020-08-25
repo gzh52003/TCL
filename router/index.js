@@ -11,6 +11,8 @@ const session=require("express-session")
 const vcoderouter=require("./vcode")
 // 令牌技术token
 const token=require("../data/token")
+
+const {formatData}=require("./tools")
 const cors = require('./cors')
 router.use(cors)
 router.use(express.urlencoded({extended:false}),express.json())
@@ -32,9 +34,13 @@ router.get("/jwtverify",(req,res)=>{
     
         // 判断能否解密出结果
         if(token.verify(authorization)){
-            res.send({"type":"sucess1"})
+            // res.send({"type":"sucess1"})
+            res.send(formatData())
         }else{
-            res.send({"type":"error8"})
+            // res.send({"type":"error8"})
+            res.send(formatData({
+                code:2,msg:"err"
+            }))
         }
        
     

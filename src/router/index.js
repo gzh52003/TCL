@@ -1,16 +1,18 @@
 // 引入模块
 import Vue from "vue";
 import VueRouter from 'vue-router'
-
+import Index from '../pages/index/Index.vue'
 import Home from '../pages/Home.vue'
 import User from '../pages/User.vue'
 import List from '../pages/List.vue'
+import AlterGoods from '../pages/list/alterGoods.vue'
 import Order from '../pages/Order.vue'
 import Nofund from '../pages/Nofund.vue'
 import Edit from '../pages/user/Edit.vue'
 import Add from '../pages/user/Add.vue'
 import Reg from '../pages/Reg.vue'
 import Login from '../pages/Login.vue'
+
 
 
 // 使用VueRouter（插件都要使用）
@@ -21,26 +23,28 @@ const router=new VueRouter({
     routes: [
         {
             path: '/',
-            component: Home
+            component: Index
         },
         {
             path: '/reg',
-            component: Reg 
+            component: Reg
         },
         {
             path: '/login',
-            component: Login 
+            component: Login,
         },
         {
-            path: '/home',
-            component: Home,
-        
+            path:'/index',
+            component:Index,
             children:[
-               
+                {
+                    path: '/home',
+                    component: Home      
+                },
                 {
                     name:"user",
                     path: '/user',
-                    component: User      
+                    component: User,      
                 },
                 {
                     name:'userEdit',
@@ -54,7 +58,11 @@ const router=new VueRouter({
                 },
                 {
                     path: '/list',
-                    component: List
+                    component: List,
+                },
+                {//修改商品资料时从List组件跳转到alterGoods组件
+                    path: '/list/alterGoods/:id',
+                    component: AlterGoods,
                 },
                 {
                     path: '/order',
