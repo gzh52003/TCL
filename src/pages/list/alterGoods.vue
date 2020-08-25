@@ -18,6 +18,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button type="primary" @click="getBack()">返回</el-button>
         </el-form-item>
       </el-col>
       <el-col :span="12" style="text-align:center;">
@@ -78,6 +79,7 @@ export default {
               type: "success",
               message: "修改成功",
             });
+            this.getBack()
           } else {
             this.$message({
               type: "fail",
@@ -90,8 +92,12 @@ export default {
         }
       });
     },
+    getBack() {
+      this.$router.back();
+    },
     //上传商品图片
     async upload(e) {
+      console.log(e);
       //创建容器
       const data = new FormData();
       //把该数据的id值传入容器

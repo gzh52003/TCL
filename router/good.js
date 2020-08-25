@@ -24,6 +24,18 @@ router.get('/many',async(req,res)=>{
         res.send(formatData({code:0}))
     }
 })
+//模糊搜索商品数据接口
+router.get('/vague',async(req,res)=>{
+    
+    const {name}=req.query;
+    let reg=new RegExp('.*'+name+'.*$','i')
+    try{
+        const result=await mongo.find('Goods',{name:reg})
+        res.send(formatData({data:result}))
+    }catch(err){
+        res.send(formatData({code:0}))
+    }
+})
 //获取指定商品数据
 router.get('/:id',async(req,res)=>{
     const {id}=req.params
@@ -35,6 +47,8 @@ router.get('/:id',async(req,res)=>{
     }
    
 })
+
+
 
 //更改指定商品数据
 router.put('/:id',async(req,res)=>{
