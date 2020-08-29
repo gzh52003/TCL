@@ -47,25 +47,6 @@ export default {
         }
       }, 1000);
     };
-    //   var validatePass = (rule, value, callback) => {
-    //     if (value === '') {
-    //       callback(new Error('请输入用户名'));
-    //     } else {
-    //       if (this.ruleForm.checkPass !== '') {
-    //         this.$refs.ruleForm.validateField('checkPass');
-    //       }
-    //       callback();
-    //     }
-    //   };
-    //   var validatePass2 = (rule, value, callback) => {
-    //     if (value === '') {
-    //       callback(new Error('请再次输入密码'));
-    //     } else if (value !== this.ruleForm.pass) {
-    //       callback(new Error('两次输入密码不一致!'));
-    //     } else {
-    //       callback();
-    //     }
-    //   };
     return {
       path: "/user",
       component: "",
@@ -89,10 +70,6 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           const { ruleForm } = this;
-          // console.log(this)
-          // const {_id}=ruleForm
-          // console.log(_id)
-          console.log(ruleForm);
           let { data } = await this.$request.get("/mongoUser/check", {
             params: {
               ...ruleForm,
@@ -101,16 +78,20 @@ export default {
           console.log(data)
           console.log(data.code);
           if (data.code === 0) {
-            alert("用户名已存在");
+            this.$message({
+              message:"用户名已存在"
+            })
             return;
           } else if (data.code === 1) {
             let { data } = await this.$request.post("/mongoUser/reg", {
               ...ruleForm,
             });
             console.log(data);
-            alert(data.msg);
+             this.$message({
+              message:"新增成功"
+            })
             this.$router.push({
-              name: "user",
+              name: "UserList",
             });
           }
         } else {
@@ -121,4 +102,10 @@ export default {
     },
   },
 };
-</script>>
+</script>
+
+<style lang="scss">
+.demo-ruleForm{
+  width: 600px;
+}
+</style>

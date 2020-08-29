@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-form
+     
       :model="ruleForm"
       status-icon
       :rules="rules"
@@ -25,7 +26,7 @@
        <img :src="avatarUrl" alt="" class="imgbox" prop="ruleForm.avatarUrl">
        <p><input type="file" @change="change"></p>
          <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')" class="btnb">提交</el-button>
       </el-form-item>
        
     </el-form>
@@ -104,6 +105,8 @@ export default {
                 this.avatarUrl=data.data.avatarUrl;
     },
     submitForm(formName) {
+      let { page } = this.$route.params;
+    console.log(page)
       // 验证规则
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
@@ -118,7 +121,8 @@ export default {
            message:"修改成功"
          })
           this.$router.push({
-            name: "user",
+            name: "UserList",
+            params: {page},
           });
         } else {
           this.$message({
@@ -134,9 +138,8 @@ export default {
     const { data } = await this.$request.get("/mongoUser/" + id);
     console.log(data)
     this.id=id
+    this.avatarUrl=data.data.avatarUrl
     Object.assign(this.ruleForm, data.data);
-    console.log(this.avatarUrl)
-    console.log(this.username)
   },
 };
 </script>
@@ -146,5 +149,10 @@ export default {
 .imgbox{
   width: 100px;
   height:100px;
+}
+.btnb{
+  position: relative;
+  left: -50px;
+  top:50px;
 }
 </style>

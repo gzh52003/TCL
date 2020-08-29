@@ -1,3 +1,4 @@
+ 
 <template>
   <el-container>
     <el-header class="header">
@@ -15,14 +16,14 @@
     <el-container class="content">
       <el-aside width="200px">
         <el-menu
-         :default-active="activeIndex"
+          router
+          :default-active="$route.path"
+          style="height:100%"
           mode="vertical"
-          background-color="#0090CE"
+          background-color="#545c64"
           text-color="#fff"
           active-text-color="#ff0"
-          @select="changeMenu"
           :default-openeds="openMenu"
-          router
         >
           <template v-for="item in menu">
             <el-menu-item :index="item.path" :key="item.path" v-if="!item.submenu">
@@ -34,7 +35,6 @@
                 <i :class="item.icon" style="color:#fff"></i>
                 {{item.text}}
               </template>
-
               <el-menu-item
                 :key="sub.path"
                 :index="item.path+sub.path"
@@ -47,31 +47,20 @@
       <el-main>
         <div style="padding:15px 0;">
           <router-view />
-          <!-- <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="pages"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-          ></el-pagination> -->
         </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
-
+ 
 
 
 <script>
-
 export default {
   name: "App",
   data() {
     return {
-      
-      username:"",
+      username: "",
       openMenu: [],
       menu: [
         {
@@ -83,6 +72,16 @@ export default {
           text: "用户管理",
           path: "/user",
           icon: "el-icon-user-solid",
+          submenu: [
+            {
+              text: "添加用户",
+              path: "/add",
+            },
+            {
+              text: "用户列表",
+              path: "/UserList",
+            },
+          ],
         },
         {
           text: "商品管理",
@@ -95,64 +94,57 @@ export default {
           icon: "el-icon-shopping-cart-2",
         },
       ],
-      activeIndex: "/home",
-      current: 0,
     };
   },
-  async created(){
-    let currentUser=localStorage.getItem("currentUser")
-    currentUser=JSON.parse(currentUser)
+  async created() {
+    let currentUser = localStorage.getItem("currentUser");
+    currentUser = JSON.parse(currentUser);
+    this.username = currentUser.username;
+
+    // 注释这段为原生的代码，更新的为采取vue路由守卫实现
     // 没有localstorage直接结束并回到登录界面
-    if(!currentUser){
-      this.$router.push("/login");
-      return
-    }else{
-      // token解密不通过删除。通过则显示用户名
-        const {data} = await this.$request.get('/jwtverify',{
-          params:{
-            authorization:currentUser.authorization
-          }
-        })
-        // console.log(data)
-        // console.log(data.code)
-        // 通过
-        if (data.code == 1) {
-                      this.username=currentUser.username
-                      // console.log(this.username)
-                }
-                // 不通过
-                else{
-                    localStorage.removeItem('currentUser');
-                    this.$router.push("/login");
-                   
-                }
-    }
-   
+    // if(!currentUser){
+    //   this.$router.push("/login");
+    //   return
+    // }else{
+    //   // token解密不通过删除。通过则显示用户名
+    //     const {data} = await this.$request.get('/jwtverify',{
+    //       params:{
+    //         authorization:currentUser.authorization
+    //       }
+    //     })
+    //     // console.log(data)
+    //     // console.log(data.code)
+    //     // 通过
+    //     if (data.code == 1) {
+    //                   this.username=currentUser.username
+    //                   // console.log(this.username)
+    //             }
+    //             // 不通过
+    //             else{
+    //                 localStorage.removeItem('currentUser');
+    //                 this.$router.push("/login");
+
+    //             }
+    // }
   },
   methods: {
-    goto(path, idx) {
-      // console.log(this.$router);
-      this.$router.push(path);
-      // this.$router.replace(path);
-      this.currentIndex = idx;
-    },
-    changeMenu(path) {
-      this.activeIndex = path;
-    },
     // 退出
-    goout(){
-                    localStorage.removeItem('currentUser');
-                    this.$router.push("/login");
-    }
+    goout() {
+      localStorage.removeItem("currentUser");
+      this.$router.push("/login");
+    },
   },
-  
-}
-    
+};
 </script>
 
 
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+}
 body,
 html {
   margin: 0;
@@ -187,8 +179,32 @@ html {
 #app {
   height: 100%;
 }
-#span1{
+#span1 {
   margin-right: 50px;
 }
+.box {
+  height: 100%;
+}
+.el-menu {
+  background: #0090ce !important;
+
+  .el-menu-item {
+    background: #0090ce !important;
+  }
+  .el-submenu__title {
+    background: #0090ce !important;
+  }
+  .el-menu-item {
+    min-width: 199px !important;
+  }
+}
+.el-main {
+  width: 100%;
+  height: 100%;
+}
+.el-submenu__title .el-submenu__icon-arrow {
+  color: red;
+}
 </style>
+
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+    <div>
     <el-form
       :inline="true"
       :model="formInline"
@@ -13,9 +13,6 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-
-    <el-button type="primary" @click.native="change()" class="btn">新增用户</el-button>
-
     <el-table :data="userlist" style="width: 100%" class="tablelist">
       <el-table-column label="Name" prop="username"></el-table-column>
       <el-table-column label="Gender" prop="gender"></el-table-column>
@@ -42,8 +39,8 @@
           >删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
-    <!-- 分页 -->
+       </el-table>
+        <!-- 分页 -->
 
     <div class="block">
       <el-pagination
@@ -56,18 +53,19 @@
         :total="total"
       ></el-pagination>
     </div>
-  </div>
+    </div>
 </template>
+
 <script>
 export default {
-  data() {
+    data() {
     return {
       
       userlist: [],
       page: 1, //当前页
       pagesize: 10, //一页多少条
       total: 0, //总条数
-      pages: 0, //总页数
+      pages: 0, //控制页码所在下标
       // imgurl:[],
       formInline: {
         user: "",
@@ -84,6 +82,7 @@ export default {
           name: user,
         },
       });
+      // console.log("data",data)
       this.total = data.data.length;
       this.userlist = data.data;
     },
@@ -95,12 +94,14 @@ export default {
     },
     // 编辑
     handleEdit(index, row) {
-      // console.log(index, row);
+    //   console.log(index, row);
       let id = row._id;
+      let page=this.page
+    //   console.log(page)
       // 根据id跳转至对应的编辑
       this.$router.push({
         name: "userEdit",
-        params: { id },
+        params: { id,page },
       });
     },
     // 删除数据
@@ -129,37 +130,36 @@ export default {
       this.fetchall();
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`, 666);
+    //   console.log(`当前页: ${val}`, 666);
       this.page = val;
       this.fetchall();
     },
     async fetchall() {
       let page = this.page;
       let size = this.pagesize;    
-    const { data } = await this.$request.get("/mongoUser/select", {
+      const { data } = await this.$request.get("/mongoUser/select", {
           params: {
             page,
             size,
           },
         });
+        // console.log(data)
         this.userlist = data.data;
         this.total = data.total;   
       }
   },
   created() {
-    // 初始化渲染页面
-    this.fetchall();
+    //   根据当前页数进行渲染
+       let { page } = this.$route.params;
+        this.handleCurrentChange(page)
+        this.pages=page
+    
+    
   },
 };
+
 </script>
-
-
 <style lang="scss">
-.btn {
-  position: relative;
-  top: 8px;
-  left: 50px;
-}
 .el-table__body-wrapper {
   height: 450px;
   overflow-y: auto !important;
