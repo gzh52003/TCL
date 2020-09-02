@@ -17,7 +17,9 @@
           <el-input type="text" v-model.number="ruleForm.price"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')"
+            >修改</el-button
+          >
           <el-button type="primary" @click="getBack()">返回</el-button>
         </el-form-item>
       </el-col>
@@ -79,7 +81,7 @@ export default {
               type: "success",
               message: "修改成功",
             });
-            this.getBack()
+            this.getBack();
           } else {
             this.$message({
               type: "fail",

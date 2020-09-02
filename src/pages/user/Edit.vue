@@ -21,16 +21,17 @@
       <el-form-item label="年龄" prop="age">
         <el-input v-model.number="ruleForm.age"></el-input>
       </el-form-item>
-    
-       <img :src="avatarUrl" alt="" class="imgbox" prop="ruleForm.avatarUrl">
-       <p><input type="file" @change="change"></p>
-         <el-form-item>
+
+      <img :src="avatarUrl" alt class="imgbox" prop="ruleForm.avatarUrl" />
+      <p>
+        <input type="file" @change="change" />
+      </p>
+      <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
       </el-form-item>
-       
     </el-form>
     <!-- 图片上传 -->
-     <!-- <el-form-item prop="avatar" label="上传图片"> -->
+    <!-- <el-form-item prop="avatar" label="上传图片"> -->
     <!-- <el-upload
       prop="avatar"
       class="upload-demo"
@@ -45,9 +46,8 @@
   
       <el-button size="small" type="primary" @change.native="change">点击上传</el-button>
       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload> -->
-       <!-- </el-form-item> -->
-      
+    </el-upload>-->
+    <!-- </el-form-item> -->
   </div>
 </template>
 
@@ -72,8 +72,8 @@ export default {
     };
     return {
       // 图片上传
-      avatarUrl:"",
-      id:"",
+      avatarUrl: "",
+      id: "",
       path: "/user",
       component: "",
       ruleForm: {
@@ -88,20 +88,20 @@ export default {
       },
     };
   },
-  
-   
+
   methods: {
     // 图片上传
-    async change(e){
-                let _id=this.id
-                // 创建一个用户存放数据的容器
-                const form = new FormData();
-                form.append('avatar',e.target.files[0]);
-                form.append('_id',_id);
-                let {data}=await this.$request.post("/upload/avatar", form,{
-                  "Content-Type": "multipart/form-data",
-                })
-                this.avatarUrl=data.data.avatarUrl;
+    async change(e) {
+      let _id = this.id;
+      // 创建一个用户存放数据的容器
+      const form = new FormData();
+      form.append("avatar", e.target.files[0]);
+      form.append("_id", _id);
+      let { data } = await this.$request.post("/upload/avatar", form, {
+        "Content-Type": "multipart/form-data",
+      });
+      console.log(data);
+      this.avatarUrl = data.data.avatarUrl;
     },
     submitForm(formName) {
       // 验证规则
@@ -115,15 +115,15 @@ export default {
           });
           console.log(data);
           this.$message({
-           message:"修改成功"
-         })
+            message: "修改成功",
+          });
           this.$router.push({
             name: "user",
           });
         } else {
           this.$message({
-           message:"修改失败"
-         })
+            message: "修改失败",
+          });
           return false;
         }
       });
@@ -132,19 +132,19 @@ export default {
   async created() {
     let { id } = this.$route.params;
     const { data } = await this.$request.get("/mongoUser/" + id);
-    console.log(data)
-    this.id=id
+    console.log(data);
+    this.id = id;
     Object.assign(this.ruleForm, data.data);
-    console.log(this.avatarUrl)
-    console.log(this.username)
+    console.log(this.avatarUrl);
+    console.log(this.username);
   },
 };
 </script>
 
 
 <style lang="scss">
-.imgbox{
+.imgbox {
   width: 100px;
-  height:100px;
+  height: 100px;
 }
 </style>

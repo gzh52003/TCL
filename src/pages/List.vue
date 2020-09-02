@@ -1,56 +1,37 @@
 <template>
-  <div style="position:relative;top:-33px">
-    <el-row>
-      <el-col :span="12">
-        <h1>商品管理</h1>
-      </el-col>
-      <el-col :span="12">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          style="padding:11px 0;height:40px"
-        >
-          <el-form-item label="查询商品">
-            <el-input
-              v-model="formInline.name"
-              placeholder="请输入商品姓名"
-              @keyup.enter.native="onSubmit"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
-  
-    <el-table :data="goodslist" style="width: 100%" height="400" >
-      <!-- 勾选框 -->
-
-           <!-- <el-table-column type="selection" width="55">
-          </el-table-column>  -->
-    
-
-      <!-- 商品图片 -->
-      <el-table-column prop="pic" label="#" width="180">
-        <template slot-scope="scope">
-          <img :src="scope.row.pic" alt width="80" />
+  <div>
+    <el-table ref="multipleTable" :data="goodslist" tooltip-effect="dark" style="width: 100%">
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="index" label="#" width="120">
+        <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
+      </el-table-column>
+      <el-table-column prop="img_url" label="图片">
+        <template v-slot:default="scope" class="topian">
+          <img :src="scope.row.img_url" style="width:60px" />
         </template>
       </el-table-column>
+      <el-table-column prop="goods_name" label="商品名称" width="120"></el-table-column>
 
-      <el-table-column prop="name" label="商品姓名" width="180"></el-table-column>
-
-      <el-table-column prop="price" label="价格"></el-table-column>
-
+      <el-table-column prop="category" label="款式" width="120"></el-table-column>
+      <el-table-column prop="price" label="价格" width="120"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
-        <template slot-scope="scope">
+        <template v-slot:default="scope">
+          <!-- 删除 -->
           <el-button
-            type="text"
+            type="danger"
+            icon="el-icon-delete"
+            circle
             size="small"
-            v-on:click="deleteGoods(scope.row._id,scope.row.name)"
-          >删除</el-button>
-          <el-button type="text" size="small" v-on:click="gotoAlterGoods(scope.row._id)">编辑</el-button>
+            @click="deletegoods(scope.row._id)"
+          ></el-button>
+          <!-- 编辑 -->
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            circle
+            size="small"
+            @click="gotoalterGoods(scope.row._id)"
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +45,6 @@
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-        style="text-align:center"
       ></el-pagination>
     </div>
   </div>
@@ -74,122 +54,91 @@
 export default {
   data() {
     return {
-      goodslist: [],
       page: 1, //当前页
       size: 10, //一页多少条
+      goodslist: [],
       total: 0, //总条数
       pages: 0, //总页数
-      formInline: {
-        name: "",
-      },
     };
   },
+
   methods: {
-  
-    // 模糊查询
-    async onSubmit() {
-      console.log(1);
-      let { name } = this.formInline;
-      let { data } = await this.$request.get("/good/vague", {
-        params: {
-          name,
-        },
-      });
-      this.total = data.data.length;
-      this.goodslist = data.data;
-    },
-    //编辑数据
-    gotoAlterGoods(id) {
-      this.$router.push("/list/alterGoods/" + id);
-    },
-    //删除数据
-    deleteGoods(id, name) {
-      const h = this.$createElement;
-      this.$msgbox({
-        title: "警告！",
-        message: h("p", null, [
-          h("span", null, "确定要删除 "),
-          h("i", { style: "color: teal" }, name),
-        ]),
-        type: "warning",
-        showCancelButton: true,
+    // 删除
+    async deletegoods(id) {
+      // console.log(333);
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        beforeClose: (action, instance, done) => {
-          if (action === "confirm") {
-            instance.confirmButtonLoading = true;
-            instance.confirmButtonText = "执行中...";
-            setTimeout(() => {
-              done();
-              setTimeout(() => {
-                instance.confirmButtonLoading = false;
-              }, 300);
-            }, 2000);
-          } else {
-            done();
-          }
-        },
+        type: "warning",
+        center: true,
       }).then(async () => {
-        //删除数据
-        console.log(id);
         const { data } = await this.$request.delete("/good/" + id);
+        // console.log(data);
         if (data.code === 1) {
-          //重新渲染
-          this.goodslist = this.goodslist.filter((item) => item._id !== id);
-          this.$message({
-            type: "info",
-            message: "删除成功" + name + "的数据",
+          this.goodslist = this.goodslist.filter((item) => {
+            // 留下不等于id的商品
+            return item._id !== id;
           });
-        } else {
           this.$message({
-            type: "info",
-            message: "删除失败",
+            type: "success",
+            message: "删除成功!",
           });
         }
       });
     },
+    // 编辑跳转
+    async gotoalterGoods(id) {
+      // console.log(444);
+      this.$router.push({
+        name: "alterGoods",
+        params: { id },
+      });
+    },
+
     // 分页
     handleSizeChange(val) {
       this.size = val; //每页多少条
       this.page = 1; //如果切换每页多少条，回到第一页开始看
+      console.log(val);
       this.fetchall();
     },
+
     handleCurrentChange(val) {
       this.page = val;
+
       this.fetchall();
     },
+
     async fetchall() {
       let page = this.page;
       let size = this.size;
-
       const { data } = await this.$request.get("/good", {
         params: {
           page,
           size,
         },
       });
-
       this.goodslist = data.data;
+      // console.log(data);
     },
   },
+  // 创建阶段发送请求获取商品
   async created() {
-    //创建阶段发送请求获取商品数据
-    let dataMany = await this.$request.get("/good/many");
-    let { data } = await this.$request.get("/good", {
+    const res = await this.$request.get("/good/many");
+    // console.log(res.data.data);
+    this.goodslist = res.data.data;
+
+    const { data } = await this.$request.get("/good/many", {
       params: {
         page: this.page,
         size: this.size,
       },
     });
-
-    // 把数据存入goodslist中
-    this.goodslist = data.data;
-    this.total = dataMany.data.data.length;
-    console.log(this.goodslist);
-    
+    // this.fetchall();
+    this.total = data.data.length;
   },
 };
 </script>
-
-<style>
+<style lang="scss" scoped>
 </style>
+  
