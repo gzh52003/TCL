@@ -35,7 +35,7 @@ router.post('/avatar', uploadMiddleware.single('avatar'), (req, res) => {
     
 
     // 更新用户信息
-    const avatarUrl = 'http://localhost:5000/public/uploads/' + req.file.filename
+    const avatarUrl = 'http://120.25.229.45:5000/public/uploads/' + req.file.filename
     mongo.update('some', { _id }, { $set: { avatarUrl } })
 
     res.send({data:{ _id, avatarUrl } });
@@ -50,7 +50,7 @@ router.put('/goods', uploadMiddleware.single('goods'), (req, res) => {
     
 
     // 更新商品信息
-    const goodsUrl = 'http://localhost:5000'+'/public/uploads/' + req.file.filename
+    const goodsUrl = 'http://120.25.229.45:5000'+'/public/uploads/' + req.file.filename
     try{
         //有goodsUrl属性则改变goodsUrl属性，没有则给数据添加goodsUrl属性并赋值
        mongo.update('Goods', { _id }, { $set: { goodsUrl } })
