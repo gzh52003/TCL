@@ -79,7 +79,12 @@ async function find(colName,query={},options={}){ // options={litmit:10,skip:0}
     }
     
     // 查询到数据集合
-    let result = collection.find(query); // 50->10
+    const opt = {}
+    // 判断是否要过滤某个字段
+    if(options.field){
+        opt.projection = options.field;
+    }
+    let result = collection.find(query,opt); 
 
     // 判断是否要跳过记录
     if(options.skip){
