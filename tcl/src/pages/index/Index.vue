@@ -79,7 +79,7 @@ export default {
             },
             {
               text: "用户列表",
-              path: "/UserList",
+              path: "/userList",
             },
           ],
         },

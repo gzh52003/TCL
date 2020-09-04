@@ -6,7 +6,7 @@ import Home from '../pages/Home.vue'
 import User from '../pages/user/User.vue'
 import Edit from '../pages/user/Edit.vue'
 import Add from '../pages/user/Add.vue'
-import UserList from '../pages/user/userList.vue'
+import UserList from '../pages/user/UserList.vue'
 import List from '../pages/List.vue'
 import AlterGoods from '../pages/list/alterGoods.vue'
 import Order from '../pages/Order.vue'
@@ -59,7 +59,7 @@ const router = new VueRouter({
                         },
                         {
                             name: "UserList",
-                            path: 'UserList',
+                            path: 'userList',
                             component: UserList
                         },
                     ]

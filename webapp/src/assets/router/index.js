@@ -38,6 +38,11 @@ const routes=[
     path: '/reg',
     name: 'Reg',
     component:()=>import('../../views/Reg.vue')
+  },
+  {
+    path: '/discover',
+    name: 'discover',
+    component:()=>import('../../views/Discover.vue')
   }
 ]
 const router = new VueRouter({

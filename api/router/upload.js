@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const {formatData}=require('../src/utils/tools')
+const {formatData}=require("./tools")
 const mongo = require('../data/mongo');
 
 
