@@ -136,11 +136,8 @@ export default {
         sort: "price",
         total: 0,
       },
-    });
-    console.log(swipre);
-    this.goodsswipe = swipre;
-  },
-};
+
+    },
 </script>
 
 <style lang="scss">
