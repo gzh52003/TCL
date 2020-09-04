@@ -17,6 +17,12 @@ export default {
         prev(){
             this.$router.go(-1)
         }
+    },
+    created(){
+        console.log('created 分类');
+    },
+    destroyed(){
+        console.log('destroyed 分类');
     }
 }
 </script>
