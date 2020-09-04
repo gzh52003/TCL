@@ -47,6 +47,16 @@ router.get('/air',async(req,res)=>{
         res.send(formatData({code:0}))
     }
 })
+
+router.get('/:id/kucun',async (req,res)=>{
+    const {id} = req.params;
+
+    // 读取数据库的库存信息
+    const result=await mongo.find('Goods',{_id:id})
+    res.send(formatData({data:result[0].kc}))
+    
+})
+
 //获取指定商品数据
 router.get('/:id',async(req,res)=>{
     const {id}=req.params
