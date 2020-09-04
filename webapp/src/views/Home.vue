@@ -3,7 +3,7 @@
     <!-- 头部搜索框 -->
     <van-search background="#FF6633" placeholder="请输入搜索关键词" />
     <!-- 轮播图 -->
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1E90FF">
       <van-swipe-item>
         <img src="../../public/img/lunbo1.jpg" alt />
       </van-swipe-item>
@@ -60,26 +60,29 @@
       <li>
         <a href=""><img src="../../public/img/worp7.jpg" alt=""/></a>
       </li>
-      <!-- <li>
+      <li>
         <a href=""><img src="../../public/img/worp8.jpg" alt=""/></a>
-      </li> -->
+      </li>
     </ul>
     <!-- 商品轮播图 -->
-    <div class="goodsswipe">
-      <div></div>
-      <van-swipe class="my-swipe" indicator-color="white">
-        <van-swipe-item v-for="item in goodsswipe" :key="item._id">
-          <li>
-            <img :src="item.cardImgSrc" alt="" />
-            <h4>{{ item.title }}</h4>
-            <span>{{ item.price }}</span>
-          </li>
-          <li></li>
-          <li></li>
-        </van-swipe-item>
-        <van-swipe-item> </van-swipe-item>
-      </van-swipe>
-    </div>
+
+    <van-swipe indicator-color="#1E90FF" class="goodsswipe">
+      <van-swipe-item class="con-left con">
+        <li v-for="item in goodsswipe" :key="item._id">
+          <img :src="item.cardImgSrc" alt="" />
+          <p>{{ item.title }}</p>
+          <span>{{ item.price }}</span>
+        </li>
+      </van-swipe-item>
+      <van-swipe-item class="con-right con">
+        <li v-for="item in goodsright" :key="item._id">
+          <img :src="item.cardImgSrc" alt="" />
+          <p>{{ item.title }}</p>
+          <span>{{ item.price }}</span>
+        </li>
+      </van-swipe-item>
+    </van-swipe>
+    <div class="tcl-dynamic"></div>
   </div>
 </template>
 
@@ -112,6 +115,7 @@ export default {
     return {
       goodslist: [],
       goodsswipe: [],
+      goodsright: [],
     };
   },
   components: {},
@@ -130,14 +134,29 @@ export default {
     // console.log(data);
     this.goodslist = list;
     // 商品轮播
+
+    // 左边
     const { data: swipre } = await this.$request.get("/goods", {
       params: {
-        size: 6,
-        sort: "price",
+        size: 3,
+        sort: "left",
         total: 0,
       },
-
-    },
+    });
+    console.log(swipre);
+    this.goodsswipe = swipre;
+    // 右边
+    const { data: right } = await this.$request.get("/goods", {
+      params: {
+        size: 3,
+        sort: "right",
+        total: 0,
+      },
+    });
+    console.log(right);
+    this.goodsright = right;
+  },
+};
 </script>
 
 <style lang="scss">
@@ -153,7 +172,7 @@ body {
   font-size: 20px;
   height: 255px;
   text-align: center;
-  background-color: #39a9ed;
+
   img {
     width: 100%;
     height: 100%;
@@ -206,7 +225,7 @@ body {
     height: 100%;
   }
 }
-.warp-4 {
+.warp-4 li {
   height: 384px;
   width: 100%;
   img {
@@ -216,6 +235,40 @@ body {
 }
 // 商品轮播
 .goodsswipe {
-  height: 282px;
+  margin-top: 40px;
+  width: 100%;
+  height: 232px;
+
+  .con {
+    display: flex;
+    justify-content: space-around;
+  }
+  li {
+    width: 33%;
+    list-style: none;
+    padding-left: 13px;
+
+    img {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  p {
+    font-size: 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  span {
+    padding-left: 20px;
+    color: #f00;
+  }
+}
+// tcl-dynamic
+.tcl-dynamic {
+  width: 100%;
+  height: 418px;
+  background: red;
 }
 </style>
