@@ -1,7 +1,7 @@
 const express=require("express");
 const router=express.Router();
 const mongo=require('../data/mongo')
-const {formatData}=require('../src/utils/tools')
+const {formatData}=require("./tools")
 //获取商品列表有限的数据的jie口
 router.get("/",async(req,res)=>{
     const {page=1,size=5}=req.query
@@ -31,6 +31,17 @@ router.get('/vague',async(req,res)=>{
     let reg=new RegExp('.*'+name+'.*$','i')
     try{
         const result=await mongo.find('Goods',{name:reg})
+        res.send(formatData({data:result}))
+    }catch(err){
+        res.send(formatData({code:0}))
+    }
+})
+// 获取空调类商品
+router.get('/air',async(req,res)=>{
+    const {name}=req.query;
+    console.log("111",name)
+    try{
+        const result=await mongo.find('Goods',{secondParentCategory:name})
         res.send(formatData({data:result}))
     }catch(err){
         res.send(formatData({code:0}))

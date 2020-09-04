@@ -66,10 +66,11 @@ export default {
     this.recommend = recommend;
 
   //   // 列表数据
+  let name="冰箱"
     const {
       data: { data: goodslist },
-    } = await this.$request.get("/good/many", {
-     
+    } = await this.$request.get("/good/air", {
+     params:{name}
     });
     this.goodslist = goodslist;
   },
