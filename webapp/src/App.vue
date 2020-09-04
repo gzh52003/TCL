@@ -1,14 +1,10 @@
 <template>
   <div id="app">
     <router-view/>
-    <!-- <van-tabbar route v-show="showMenu">
-      <van-tabbar-item  v-for="item in menu" :key="item.name" :to="item.path">{{item.text}}</van-tabbar-item>
-  </van-tabbar> -->
 
-
-  <van-tabbar v-show="showMenu" route>
-  <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path">
-     <template #icon="props">
+  <van-tabbar v-show="showTabbar" route>
+  <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path" :badge="item.name==='cart'?cartLength:''">
+     <template #icon="props" >
       <img :src="props.active ? item.icon.active : item.icon.inactive" style="width:70px;height:49px;display:blcok" />
     </template>
   </van-tabbar-item>
@@ -17,7 +13,13 @@
 </template>
 <script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag} from 'vant';
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row} from 'vant';
+
+
+Vue.use(Col);
+Vue.use(Row);
+Vue.use(Notify);
+Vue.use(NavBar);
 Vue.use(Button)
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
@@ -25,7 +27,6 @@ Vue.use(Tag);
 export default {
   data(){
     return {
-      showMenu:true,
       active: "home",
       menu:[{
         name:'home',
@@ -75,6 +76,15 @@ export default {
       ]
     }
   }
+  ,
+  computed:{
+    cartLength(){
+      return this.$store.state.cart.goodslist.length
+    },
+    showTabbar(){
+      return this.$store.state.common.showTabbar
+    }
+  },
 }
 </script>
 <style>
