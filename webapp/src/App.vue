@@ -7,7 +7,7 @@
 
           <!-- 弹出分类组件 -->
           <van-popup v-model="show" position="bottom" :style="{ height: '100%' }" >
-            <discover/>
+            <discover v-bind:switch.sync="show"/>
           </van-popup>
 
     <van-tabbar v-show="showMenu" route>
@@ -26,12 +26,14 @@
 <script>
 import discover from "./views/Discover"
 import Vue from "vue";
-import { Button, Tabbar, TabbarItem, Tag, Popup } from "vant";
+import { Button, Tabbar, TabbarItem, Tag, Popup,Icon } from "vant";
 Vue.use(Button);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
 Vue.use(Popup);
+Vue.use(Icon);
+
 export default {
   data() {
     return {
@@ -103,6 +105,12 @@ export default {
       }
     }
   },
+  //跳转路由时收起弹出分类
+  watch:{
+   '$route'(){
+     this.show=false
+   }
+  }
 };
 </script>
 <style lang="scss">
