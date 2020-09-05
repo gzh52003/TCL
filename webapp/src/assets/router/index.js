@@ -29,20 +29,31 @@ const routes=[
     name: 'Cart',
     component:()=>import('../../views/Cart.vue')
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component:()=>import('../../views/Login.vue')
-  },
-  {
-    path: '/reg',
-    name: 'Reg',
-    component:()=>import('../../views/Reg.vue')
-  },
+ 
   {
     path: '/discover',
     name: 'discover',
     component:()=>import('../../views/Discover.vue')
+  },
+  {
+    path: '/mine',
+    name: 'mine',
+    component:()=>import('../../views/Mine.vue')
+  },
+  {
+    path: '/repair',
+    name: 'repair',
+    component:()=>import('../../views/Repair.vue')
+  },
+  {
+    path: '/reg',
+    name: 'reg',
+    component:()=>import('../../views/Reg.vue')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component:()=>import('../../views/Login.vue')
   }
 ]
 const router = new VueRouter({

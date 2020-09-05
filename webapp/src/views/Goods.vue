@@ -1,5 +1,11 @@
 <template>
   <div>
+     <van-nav-bar
+        title="购物车"
+        left-text="返回"
+        left-arrow
+        @click-left="onClickLeft"
+/>
     <van-image :src="data.pic" style="height:150px"></van-image>
     <div class="goods-info">
       <h1 style="font-size:12px">{{data.name}}</h1>
@@ -24,10 +30,10 @@
 
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" color="#07c160" />
-      <van-goods-action-icon icon="cart-o" text="购物车" @click="goto('/cart')" :badge="cartlist.length"/>
+      <van-goods-action-icon icon="cart-o" text="购物车" @click="goto('/cart')" :badge="cartlist.length" />
       <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
       <van-goods-action-button type="warning" text="加入购物车" @click="addcart"/>
-      <van-goods-action-button type="danger" text="立即购买" />
+      <van-goods-action-button type="danger" text="立即购买"  @click="buyNow" />
     </van-goods-action>
   </div>
 </template>
@@ -48,9 +54,16 @@ export default {
     };
   },
   methods: {
+    buyNow(){
+      this.$router.push("/cart");
+    },
+
     goto(path) {
       this.$router.push(path);
     },
+    onClickLeft(){
+            this.$router.go(-1)
+        },
     // 点击推荐替换本页面
     gotoDetail(id) {
       this.goto({
@@ -87,29 +100,24 @@ export default {
           ...this.data,
           qty:1
         }
-        console.log(goods)
         // 调用mutation方法
         this.$store.commit('add',goods);
-      }
-      
-
+      }  
     }
   },
   // 
   computed:{
     cartlist(){
-      return this.$store.state.goodslist;
+      return this.$store.state.cart.goodslist;
     }
   }
     ,
-  mounted() {
+   mounted(){
     // 控制菜单显示
-    this.$parent.showMenu = false;
+    this.$store.commit('displayTabbar',false);
   },
-  destroyed() {
-    // 退出该页面主页菜单要显示回去
-    this.$parent.showMenu = true;
-    // this.goodsRequestSource.cancel()
+  destroyed(){
+    this.$store.commit('displayTabbar',true);
   },
 
   async created() {
