@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 头部搜索框 -->
-    <van-search background="#FF6633" placeholder="请输入搜索关键词" />
+    <van-search background="#FF6633" placeholder="请输入搜索关键词" @click="onSubmit" />
     <!-- 轮播图 -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1E90FF">
       <van-swipe-item>
@@ -210,11 +210,27 @@ export default {
       goodslist: [],
       goodsswipe: [],
       goodsright: [],
+      formInline: {
+        name: "",
+      },
     };
   },
   components: {},
   methods: {
     gotoDetail() {},
+    // 模糊搜索
+    async onSubmit() {
+      console.log(1);
+      let { name } = this.formInline;
+      let { data } = await this.$request.get("good/vague", {
+        params: {
+          name,
+        },
+      });
+      this.total = data.data.length;
+      this.goodslist = data.data;
+      console.log(data.data);
+    },
   },
   async created() {
     //  宫格导航
@@ -225,7 +241,7 @@ export default {
         total: 0,
       },
     });
-    // console.log(data);
+    console.log(list);
     this.goodslist = list;
     // 商品轮播
 
