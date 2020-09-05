@@ -14,15 +14,14 @@
             @click="changeMenu(idx)"
           >
             <img class="classification" v-if="idx==active" :src="publicPath+item.actionsIco" alt />
-            
+
             <img class="classification" v-else :src="publicPath+item.ico" alt />
             {{item.text}}
           </li>
         </ul>
       </van-col>
-      <van-col span="19" >
-        
-          <discover-list :transfer="contentData"/>
+      <van-col span="19">
+        <discover-list :transfer="contentData"  />
         
       </van-col>
     </van-row>
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import DiscoverList from "./Discover-module/discover-list"
+import DiscoverList from "./Discover-module/discover-list";
 import Vue from "vue";
 import {
   TreeSelect,
@@ -54,57 +53,52 @@ Vue.use(GridItem);
 Vue.use(Card);
 export default {
   name: "List",
-  components:{
-      DiscoverList
+  components: {
+    DiscoverList,
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
       active: 0,
-    //   左侧资料
-      contentData:{},
+      //   左侧资料
+
+      contentData: "",
+      
       items: [
         {
           text: "空调",
           ico: "vue-ico/kontiao-gray.png",
           actionsIco: "vue-ico/kontiao-red.png",
-          
         },
         {
           text: "电视",
           ico: "vue-ico/television-gray.png",
           actionsIco: "vue-ico/television-red.png",
-          
         },
         {
           text: "冰箱",
           ico: "vue-ico/binxiang-gray.png",
           actionsIco: "vue-ico/binxiangred.png",
-          
         },
         {
           text: "洗衣机",
           ico: "vue-ico/washing-gray.png",
           actionsIco: "vue-ico/washing-red.png",
-          
         },
         {
           text: "健康电器",
           ico: "vue-ico/Health-gray.png",
           actionsIco: "vue-ico/Health-red.png",
-          
         },
         {
           text: "智能硬件",
           ico: "vue-ico/intelligent-gray.png",
           actionsIco: "vue-ico/intelligent-red.png",
-          
         },
         {
           text: "其他",
           ico: "vue-ico/other.png",
           actionsIco: "vue-ico/other-red.png",
-          
         },
       ],
     };
@@ -117,17 +111,31 @@ export default {
     //切换商品类选项
     changeMenu(idx) {
       this.active = idx;
+      console.log(idx);
     },
   },
-  async created(){
-  let id="5f522e5752830a33de95b427"
-    const {data:{data:result}}=await this.$request.get('good/list/'+id)
-    console.log(result[0]);
-    this.contentData=result[0]
+   async created() {
+    let idList = [
+      "5f522e5752830a33de95b427",
+      "5f522e8252830a33de95b42f",
+      "5f522e9452830a33de95b432",
+      "5f522eb652830a33de95b439",
+      "5f522ece52830a33de95b43d",
+      "5f522ee752830a33de95b442",
+    ];
+    
+      let {
+        data: { data: result },
+      } = await this.$request.get("good/list/" + idList[0]);
+
+      // console.log(result[0]);
+      this.contentData=result[0]
+    
+   
   },
-  mounted(){
-      console.log(this.$el);
-  }
+  mounted() {
+
+  },
 };
 </script>
 <style lang="scss">
@@ -189,7 +197,6 @@ body {
     }
     .van-col--19 {
       background-color: #fff;
-      
     }
   }
 }

@@ -6,7 +6,7 @@
 
     <van-divider :style="{padding: '0 64px',color:'#333'}" :hairline="false">热门分类</van-divider>
     <!-- 商品宫格 -->
-    <van-grid :column-num="3">
+    <van-grid :column-num="3" :border='false'>
       <template v-for="(value,idx) in transfer.retData.keyWords.length">
         <van-grid-item
           :key="value"
@@ -16,7 +16,10 @@
       </template>
     </van-grid>
     <!-- 跳转按钮 -->
-    <van-button type="danger">进入{{transfer.retData.titleName}}频道></van-button>
+    <div style="padding:0 12px">
+    <van-button size="small" block>{{transfer.retData.titleName}}频道></van-button>
+
+    </div>
     <van-divider :style="{padding: '0 64px',color:'#333'}" :hairline="false">热门单品</van-divider>
 
     <!-- 商品列表 -->
@@ -38,12 +41,9 @@
 </template>
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: ["transfer"],
   created() {
-    console.log(this.props[0]);
+    console.log('this.props[0]',this.props[0]);
   },
 };
 </script>
@@ -51,6 +51,32 @@ export default {
 #DiscoverList {
   // height: 400px;
   overflow: hidden;
-  padding: 20px;
+  padding: 20px 20px 50px;
+  .van-button{
+    background-color: #fff6f0;
+    color: #333;
+    border: none;
+  }
+  // 商品卡
+  .van-card{
+    background-color: #fff;
+    padding:12px 0;
+    border-bottom: 1px solid #eee;
+    .van-card__header{
+      .van-card__thumb{
+        height: 60px;
+        width: 60px;
+      }
+      .van-card__content{
+        min-height: 60px;
+        .van-card__bottom{
+          .van-card__price{
+            color: #ff4545;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
