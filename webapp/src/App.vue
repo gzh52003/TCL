@@ -1,57 +1,37 @@
 <template>
   <div id="app">
-<<<<<<< HEAD
     <router-view />
     <!-- <van-tabbar route v-show="showMenu">
       <van-tabbar-item  v-for="item in menu" :key="item.name" :to="item.path">{{item.text}}</van-tabbar-item>
     </van-tabbar>-->
 
-          <!-- 弹出分类组件 -->
-          <van-popup v-model="show" position="bottom" :style="{ height: '100%' }" >
-            <discover v-bind:switch.sync="show"/>
-          </van-popup>
+    <!-- 弹出分类组件 -->
+    <van-popup v-model="show" position="bottom" :style="{ height: '100%' }">
+      <discover v-bind:switch.sync="show" />
+    </van-popup>
 
     <van-tabbar v-show="showMenu" route>
-      <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path" @click="changeTab(item)">
+      <van-tabbar-item
+        v-for="item in menu"
+        :key="item.name"
+        :to="item.path"
+        @click="changeTab(item)"
+      >
         <template #icon="props">
           <img
             :src="props.active ? item.icon.active : item.icon.inactive"
             style="width:70px;height:49px;display:blcok"
           />
         </template>
-      
       </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 <script>
-import discover from "./views/Discover"
+import discover from "./views/Discover";
 import Vue from "vue";
-import { Button, Tabbar, TabbarItem, Tag, Popup,Icon } from "vant";
+import { Button, Tabbar, TabbarItem, Tag, Popup, Icon } from "vant";
 Vue.use(Button);
-=======
-    <router-view/>
-
-  <van-tabbar v-show="showTabbar" route>
-  <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path" :badge="item.name==='cart'?cartLength:''">
-     <template #icon="props" >
-      <img :src="props.active ? item.icon.active : item.icon.inactive" style="width:70px;height:49px;display:blcok" />
-    </template>
-  </van-tabbar-item>
-</van-tabbar>
-  </div>
-</template>
-<script>
-import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row} from 'vant';
-
-
-Vue.use(Col);
-Vue.use(Row);
-Vue.use(Notify);
-Vue.use(NavBar);
-Vue.use(Button)
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
@@ -61,11 +41,8 @@ Vue.use(Icon);
 export default {
   data() {
     return {
-<<<<<<< HEAD
       showMenu: true,
       show: false,
-=======
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
       active: "home",
       menu: [
         {
@@ -119,46 +96,33 @@ export default {
       ],
     };
   },
-  components:{
-    discover
+  components: {
+    discover,
   },
   methods: {
     showPopup() {
       this.show = !this.show;
     },
-    changeTab(item){
-      if(item.name=='discover'){
-        this.showPopup()
+    changeTab(item) {
+      if (item.name == "discover") {
+        this.showPopup();
       }
-    }
+    },
   },
   //跳转路由时收起弹出分类
-  watch:{
-   '$route'(){
-     this.show=false
-   }
-  }
-<<<<<<< HEAD
-};
-=======
-  ,
-  computed:{
-    cartLength(){
-      return this.$store.state.cart.goodslist.length
+  watch: {
+    $route() {
+      this.show = false;
     },
-    showTabbar(){
-      return this.$store.state.common.showTabbar
-    }
   },
-}
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
+};
 </script>
 <style lang="scss">
 .van-tabbar-item__icon {
   margin: 0;
 }
-#app{
-  .van-hairline--top-bottom{
+#app {
+  .van-hairline--top-bottom {
     z-index: 3000;
   }
 }
