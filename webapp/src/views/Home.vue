@@ -1,7 +1,18 @@
 <template>
   <div class="home">
     <!-- 头部搜索框 -->
-    <van-search background="#FF6633" placeholder="请输入搜索关键词" @click="onSubmit" />
+    <van-search
+      show-action
+      label="TCL"
+      placeholder="请输入搜索关键词"
+      @search="onSearch"
+      background="	#DC143C"
+      class="search"
+    >
+      <template #action>
+        <div @click="onSearch">搜索</div>
+      </template>
+    </van-search>
     <!-- 轮播图 -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1E90FF">
       <van-swipe-item>
@@ -172,7 +183,7 @@
         <van-icon name="phone-circle-o" color="red" class="icon" />
       </p>
       <p class="top">
-        <van-icon name="back-top" class="icon" />
+        <van-icon name="back-top" class="icon" @click="toTop" v-if="gotop" />
       </p>
     </nav>
   </div>
@@ -213,13 +224,34 @@ export default {
       formInline: {
         name: "",
       },
+      gotop: false,
     };
   },
   components: {},
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, true);
+  },
   methods: {
+    // 回到顶部
+    handleScroll() {
+      let scrolltop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      scrolltop > 1000 ? (this.gotop = true) : (this.gotop = false);
+    },
+    toTop() {
+      let top = document.documentElement.scrollTop || document.body.scrollTop;
+      // 实现滚动效果
+      const timeTop = setInterval(() => {
+        document.body.scrollTop = document.documentElement.scrollTop = top -= 50;
+        if (top <= 0) {
+          clearInterval(timeTop);
+        }
+      }, 10);
+    },
+
     gotoDetail() {},
     // 模糊搜索
-    async onSubmit() {
+    async onSearch() {
       console.log(1);
       let { name } = this.formInline;
       let { data } = await this.$request.get("good/vague", {
@@ -232,6 +264,7 @@ export default {
       console.log(data.data);
     },
   },
+
   async created() {
     //  宫格导航
     const { data: list } = await this.$request.get("/goods", {
@@ -276,6 +309,12 @@ body {
 * {
   margin: 0;
   padding: 0;
+}
+.search {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  width: 100%;
 }
 .my-swipe .van-swipe-item {
   color: #fff;

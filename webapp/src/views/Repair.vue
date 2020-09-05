@@ -106,6 +106,7 @@ export default {
     };
   },
   methods: {
+    // 点击后退
     onClickLeft() {
       this.$router.go(-1);
     },
@@ -113,9 +114,9 @@ export default {
   // 改变底部菜单显示状态
   // 挂载
   mounted() {
+    // 控制菜单显示
     this.$store.commit("displayTabbar", false);
   },
-  // 销毁
   destroyed() {
     this.$store.commit("displayTabbar", true);
   },
