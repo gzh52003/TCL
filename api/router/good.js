@@ -101,4 +101,13 @@ router.delete('/:id',async(req,res)=>{
     }
 })
 
+router.get('/list/:id',async(req,res)=>{
+    const {id}=req.params;
+    try{
+        const result=await mongo.find("list",{_id:id})
+        res.send(formatData({code:1,data:result}))
+    }catch(err){
+        res.send(formatData({code:0}))
+    }
+})
 module.exports=router

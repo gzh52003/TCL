@@ -11,8 +11,15 @@
 
 <van-row>
   <van-col style="background-color:red;width:100%;padding-left:40%;padding-top:10%;color:#fff;height:100px">
-    <span style="cursor:pointer" @click="gologin">登录</span>/
+    <div v-if="">
+      <span>欢迎登录：</span>
+      <span></span>
+      </div>
+    <div >
+       <span style="cursor:pointer" @click="gologin">登录</span>/
     <span style="cursor:pointer" @click="goreg">注册</span>
+    </div>
+   
   </van-col>
 </van-row>
   </div>
@@ -20,6 +27,11 @@
 <script>
 export default {
   name:'mine',
+  data(){
+    return {
+        
+    }
+  },
    methods:{
      onClickLeft(){
             this.$router.go(-1)

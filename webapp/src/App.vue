@@ -13,7 +13,7 @@
 </template>
 <script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row} from 'vant';
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Form} from 'vant';
 
 
 Vue.use(Col);
@@ -24,6 +24,7 @@ Vue.use(Button)
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
+Vue.use(Form);
 export default {
   data(){
     return {
