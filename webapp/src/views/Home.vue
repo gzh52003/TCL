@@ -95,14 +95,14 @@
 
     <van-swipe indicator-color="#1E90FF" class="goodsswipe">
       <van-swipe-item class="con-left con">
-        <li v-for="item in goodsswipe" :key="item._id">
+        <li v-for="item in goodsswipe" :key="item._id" @click="goto(item._id)">
           <img :src="item.cardImgSrc" alt />
           <p>{{ item.title }}</p>
           <span>{{ item.price }}</span>
         </li>
       </van-swipe-item>
       <van-swipe-item class="con-right con">
-        <li v-for="item in goodsright" :key="item._id">
+        <li v-for="item in goodsright" :key="item._id" @click="goto(item._id)">
           <img :src="item.cardImgSrc" alt />
           <p>{{ item.title }}</p>
           <span>{{ item.price }}</span>
@@ -261,43 +261,47 @@ export default {
       });
       this.total = data.data.length;
       this.goodslist = data.data;
-      console.log(data.data);
+      // console.log(data.data);
+    },
+
+    // 跳转到详情页
+    goto(id) {
+      // this.$router.push(`/good/${id}`);
+      this.$router.push({ name: "Good", params: { id } });
     },
   },
 
   async created() {
     //  宫格导航
-    const { data: list } = await this.$request.get("/goods", {
+    // const { data: list } = await this.$request.get("/goods", {
+    //   params: {
+    //     size: 8,
+    //     sort: "tag",
+    //     total: 0,
+    //   },
+    // });
+    const { data: list } = await this.$request.get("/good/home", {
       params: {
-        size: 8,
-        sort: "tag",
-        total: 0,
+        name: "top",
       },
     });
-    console.log(list);
-    this.goodslist = list;
-    // 商品轮播
+    this.goodslist = list.data;
 
-    // 左边
-    const { data: swipre } = await this.$request.get("/goods", {
+    const { data: swipre } = await this.$request.get("/good/home", {
       params: {
-        size: 3,
-        sort: "left",
-        total: 0,
+        name: "left",
       },
     });
-    console.log(swipre);
-    this.goodsswipe = swipre;
-    // 右边
-    const { data: right } = await this.$request.get("/goods", {
+    console.log(swipre.data);
+    this.goodsswipe = swipre.data;
+
+    const { data: right } = await this.$request.get("/good/home", {
       params: {
-        size: 3,
-        sort: "right",
-        total: 0,
+        name: "right",
       },
     });
-    console.log(right);
-    this.goodsright = right;
+
+    this.goodsright = right.data;
   },
 };
 </script>

@@ -1,11 +1,6 @@
 <template>
   <div>
-     <van-nav-bar
-        title="购物车"
-        left-text="返回"
-        left-arrow
-        @click-left="onClickLeft"
-/>
+    <van-nav-bar title="购物车" left-text="返回" left-arrow @click-left="onClickLeft" />
     <van-image :src="data.pic" style="height:150px"></van-image>
     <div class="goods-info">
       <h1 style="font-size:12px">{{data.name}}</h1>
@@ -30,10 +25,15 @@
 
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" color="#07c160" />
-      <van-goods-action-icon icon="cart-o" text="购物车" @click="goto('/cart')" :badge="cartlist.length" />
+      <van-goods-action-icon
+        icon="cart-o"
+        text="购物车"
+        @click="goto('/cart')"
+        :badge="cartlist.length"
+      />
       <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
-      <van-goods-action-button type="warning" text="加入购物车" @click="addcart"/>
-      <van-goods-action-button type="danger" text="立即购买"  @click="buyNow" />
+      <van-goods-action-button type="warning" text="加入购物车" @click="addcart" />
+      <van-goods-action-button type="danger" text="立即购买" @click="buyNow" />
     </van-goods-action>
   </div>
 </template>
@@ -54,16 +54,16 @@ export default {
     };
   },
   methods: {
-    buyNow(){
+    buyNow() {
       this.$router.push("/cart");
     },
 
     goto(path) {
       this.$router.push(path);
     },
-    onClickLeft(){
-            this.$router.go(-1)
-        },
+    onClickLeft() {
+      this.$router.go(-1);
+    },
     // 点击推荐替换本页面
     gotoDetail(id) {
       this.goto({
@@ -89,35 +89,34 @@ export default {
       this.recommend = recommend.data;
     },
     // 添加商品进购物车(qty为自定义的统计数量)
-    addcart(){
-      const {_id} = this.data;
-      const current = this.cartlist.filter(item=>item._id === _id)[0]
-    //  判断购物车是否已有该商品，如果是已有，则直接改变数量，没有则新增
-      if(current){
-        this.$store.commit('changeQty',{_id,qty:current.qty+1})
-      }else{
-          const goods = {
+    addcart() {
+      const { _id } = this.data;
+      const current = this.cartlist.filter((item) => item._id === _id)[0];
+      //  判断购物车是否已有该商品，如果是已有，则直接改变数量，没有则新增
+      if (current) {
+        this.$store.commit("changeQty", { _id, qty: current.qty + 1 });
+      } else {
+        const goods = {
           ...this.data,
-          qty:1
-        }
+          qty: 1,
+        };
         // 调用mutation方法
-        this.$store.commit('add',goods);
-      }  
-    }
+        this.$store.commit("add", goods);
+      }
+    },
   },
-  // 
-  computed:{
-    cartlist(){
+  //
+  computed: {
+    cartlist() {
       return this.$store.state.cart.goodslist;
-    }
-  }
-    ,
-   mounted(){
-    // 控制菜单显示
-    this.$store.commit('displayTabbar',false);
+    },
   },
-  destroyed(){
-    this.$store.commit('displayTabbar',true);
+  mounted() {
+    // 控制菜单显示
+    this.$store.commit("displayTabbar", false);
+  },
+  destroyed() {
+    this.$store.commit("displayTabbar", true);
   },
 
   async created() {

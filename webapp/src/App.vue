@@ -10,7 +10,7 @@
       <discover v-bind:switch.sync="show" />
     </van-popup>
 
-    <van-tabbar v-show="showMenu" route>
+    <van-tabbar v-show="showTabbar" route>
       <van-tabbar-item
         v-for="item in menu"
         :key="item.name"
@@ -99,6 +99,12 @@ export default {
   components: {
     discover,
   },
+  computed: {
+    showTabbar() {
+      return this.$store.state.common.showTabbar;
+    },
+  },
+
   methods: {
     showPopup() {
       this.show = !this.show;

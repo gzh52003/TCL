@@ -2,6 +2,13 @@ const express = require("express");
 const router = express.Router();
 const mongo = require("../data/mongo");
 const { formatData } = require("./tools");
+
+// 获取home的商品信息
+router.get("/home", async(req, res) => {
+    let { name } = req.query;
+    const result = await mongo.find("home", { name });
+    res.send(formatData({ data: result }));
+});
 //获取商品列表有限的数据的jie口
 router.get("/", async(req, res) => {
     const { page = 1, size = 5 } = req.query;
