@@ -98,7 +98,7 @@ export default {
                 let {data}=await this.$request.post("/mongoUser/login",{
                         username,password,checked,vcode,                                  
                 });
-                console.log(data)
+                // console.log(data)
                 if(data.code===3){
                 Notify({ type: 'danger', message: '验证码错误' });
                   // 刷新验证码
@@ -110,7 +110,7 @@ export default {
                 if(data.code==1){
                      localStorage.setItem("currentUser", JSON.stringify(data.data))
                    Notify({ type: 'success', message: '登录成功' });
-                    this.$router.push("/home");
+                    this.$router.push("/mine");
                 }else if(data.code==2){//密码或用户名错误
                      Notify({ type: 'danger', message: '用户名或者密码错误' });
                         return
