@@ -5,20 +5,24 @@
       <van-tabbar-item  v-for="item in menu" :key="item.name" :to="item.path">{{item.text}}</van-tabbar-item>
     </van-tabbar>-->
 
-          <!-- 弹出分类组件 -->
-          <van-popup v-model="show" position="bottom" :style="{ height: '100%' }" >
-            <discover v-bind:switch.sync="show"/>
-          </van-popup>
+    <!-- 弹出分类组件 -->
+    <van-popup v-model="show" position="bottom" :style="{ height: '100%' }">
+      <discover v-bind:switch.sync="show" />
+    </van-popup>
 
-    <van-tabbar v-show="showMenu" route>
-      <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path" @click="changeTab(item)">
+    <van-tabbar v-show="showTabbar" route>
+      <van-tabbar-item
+        v-for="item in menu"
+        :key="item.name"
+        :to="item.path"
+        @click="changeTab(item)"
+      >
         <template #icon="props">
           <img
             :src="props.active ? item.icon.active : item.icon.inactive"
             style="width:70px;height:49px;display:blcok"
           />
         </template>
-      
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -95,18 +99,24 @@ export default {
       ],
     };
   },
-  components:{
-    discover
+  components: {
+    discover,
   },
+  computed: {
+    showTabbar() {
+      return this.$store.state.common.showTabbar;
+    },
+  },
+
   methods: {
     showPopup() {
       this.show = !this.show;
     },
-    changeTab(item){
-      if(item.name=='discover'){
-        this.showPopup()
+    changeTab(item) {
+      if (item.name == "discover") {
+        this.showPopup();
       }
-    }
+    },
   },
   //跳转路由时收起弹出分类
   watch:{
@@ -119,9 +129,6 @@ export default {
     cartLength(){
       return this.$store.state.cart.goodslist.length
     },
-    showTabbar(){
-      return this.$store.state.common.showTabbar
-    }
   },
 }
 </script>
@@ -129,8 +136,8 @@ export default {
 .van-tabbar-item__icon {
   margin: 0;
 }
-#app{
-  .van-hairline--top-bottom{
+#app {
+  .van-hairline--top-bottom {
     z-index: 3000;
   }
 }
