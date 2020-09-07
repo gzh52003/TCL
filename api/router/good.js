@@ -15,6 +15,8 @@ router.get("/",async(req,res)=>{
     }
    
 })
+
+
 //获取商品列表全部数据的接口
 router.get('/many',async(req,res)=>{
     try{
@@ -110,4 +112,40 @@ router.get('/list/:id',async(req,res)=>{
         res.send(formatData({code:0}))
     }
 })
+// 添加商品
+router.get("/:id/addshop", async (req, res) => {
+    let {id}=req.params
+    
+    let {name,tit,newprice,oldprice,imgurl,qty} = req.query;
+    let result
+    console.log(id,qty)
+    // 查询商品名是否存在
+    let result1 = await mongo.find("cart",{_id:id})
+    console.log(result1)
+    
+    // 大于0存在执行qty+1
+    if (result1.length > 0) {
+        let newData={qty}
+        console.log(newData)
+        try{
+        await mongo.update("cart",{_id:id},{$set:newData})
+        console.log("updata")
+        res.send(formatData({code:4}))
+    }catch(err){
+        res.send(formatData({code:0}))
+    }
+    } 
+    else {
+        try {
+            result = await mongo.insert("cart", {name,tit,newprice,oldprice,imgurl,qty})
+            console.log("insert")
+            res.send(formatData())
+        } catch{
+            res.send(formatData({code:2}))
+        }
+    }
+    
+  
+}
+)
 module.exports=router

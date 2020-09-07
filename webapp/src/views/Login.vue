@@ -88,8 +88,8 @@ export default {
          let {data}=await this.$request.get("vcode")
          this.$refs.vcode.innerHTML=data.data 
     },
-    async submit(val){
-                console.log(val)
+    async submit(){
+                // console.log(val)
                 let username=this.value1
                 let password=this.value2
                 let checked=this.checkbox

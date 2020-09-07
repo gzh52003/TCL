@@ -61,10 +61,13 @@ async function update(colName,query,newData){ // newData{$set:{price:200,qty:2},
     const collection = db.collection(colName);
 
     if(query._id && typeof query._id === 'string'){
+        console.log( 1111,query._id)
         query._id = ObjectId(query._id);
+        console.log( 2211,query._id)
     }
 
     const result = await collection.updateMany(query,newData);
+    // console.log(result)
     client.close();
 
     return result;
@@ -74,6 +77,7 @@ async function update(colName,query,newData){ // newData{$set:{price:200,qty:2},
 async function find(colName,query={},options={}){ // options={litmit:10,skip:0}
     const {client,db} = await connect();
     const collection = db.collection(colName);
+    console.log(query._id )
     if(query._id && typeof query._id === 'string'){
         query._id = ObjectId(query._id);
     }
