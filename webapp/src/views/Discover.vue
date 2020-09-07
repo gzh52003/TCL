@@ -10,7 +10,7 @@
           <li
             v-for="(item,idx) in items"
             :key="idx"
-            :class="idx==active?'active':''"
+            :class="idx==active?'discoverActive':''"
             @click="changeMenu(idx)"
           >
             <img class="classification" v-if="idx==active" :src="publicPath+item.actionsIco" alt />
@@ -21,7 +21,7 @@
         </ul>
       </van-col>
       <van-col span="19">
-        <discover-list :transfer="contentData"  />
+        <discover-list :transfer="contentData" :transferIdx="active"  />
         
       </van-col>
     </van-row>
@@ -62,7 +62,7 @@ export default {
       active: 0,
       //   左侧资料
 
-      contentData: "",
+      contentData: [],
       
       items: [
         {
@@ -123,13 +123,18 @@ export default {
       "5f522ece52830a33de95b43d",
       "5f522ee752830a33de95b442",
     ];
-    
-      let {
-        data: { data: result },
-      } = await this.$request.get("good/list/" + idList[0]);
+    let data
+    idList.forEach(async(item)=>{
+      data=await this.$request.get("good/list/" + item);
+      this.contentData.push(data)
+    })
+    console.log(this.contentData);
+      // let {
+      //   data: { data: result },
+      // } = await this.$request.get("good/list/" + idList[0]);
 
       // console.log(result[0]);
-      this.contentData=result[0]
+      // this.contentData=result[0]
     
    
   },
@@ -138,12 +143,13 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+
+<style lang="scss" >
 html,
 body {
   height: 100%;
 }
-.active {
+.discoverActive {
   color: #ff4545 !important;
   background-color: #fff;
   border-left: 2px solid #ff4545;

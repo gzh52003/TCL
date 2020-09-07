@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-<<<<<<< HEAD
     <router-view />
     <!-- <van-tabbar route v-show="showMenu">
       <van-tabbar-item  v-for="item in menu" :key="item.name" :to="item.path">{{item.text}}</van-tabbar-item>
@@ -25,47 +24,24 @@
   </div>
 </template>
 <script>
-import discover from "./views/Discover"
-import Vue from "vue";
-import { Button, Tabbar, TabbarItem, Tag, Popup,Icon } from "vant";
-Vue.use(Button);
-=======
-    <router-view/>
-
-  <van-tabbar v-show="showTabbar" route>
-  <van-tabbar-item v-for="item in menu" :key="item.name" :to="item.path" :badge="item.name==='cart'?cartLength:''">
-     <template #icon="props" >
-      <img :src="props.active ? item.icon.active : item.icon.inactive" style="width:70px;height:49px;display:blcok" />
-    </template>
-  </van-tabbar-item>
-</van-tabbar>
-  </div>
-</template>
-<script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row} from 'vant';
-
-
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Popup,Icon} from 'vant';
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Notify);
 Vue.use(NavBar);
 Vue.use(Button)
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
 Vue.use(Popup);
 Vue.use(Icon);
-
+import discover from './views/Discover'
 export default {
   data() {
     return {
-<<<<<<< HEAD
       showMenu: true,
       show: false,
-=======
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
       active: "home",
       menu: [
         {
@@ -138,9 +114,6 @@ export default {
      this.show=false
    }
   }
-<<<<<<< HEAD
-};
-=======
   ,
   computed:{
     cartLength(){
@@ -151,7 +124,6 @@ export default {
     }
   },
 }
->>>>>>> fda6095b8ebe9316835f613d92ac59752adc05ca
 </script>
 <style lang="scss">
 .van-tabbar-item__icon {
