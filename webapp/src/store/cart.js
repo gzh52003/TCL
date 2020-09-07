@@ -41,7 +41,10 @@ const cart = {
             state.goodslist.unshift(goods)
             // console.log('add to cart',goods)
         },
-
+        // 初始化购物车页面
+        GO(state,data){
+            state.goodslist = data;
+        },
         // 修改数量
         changeQty(state,{_id,qty}){
             state.goodslist = state.goodslist.map(item=>{

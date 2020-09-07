@@ -101,14 +101,36 @@ export default {
             this.$router.push("/home")
         },
         // 删除商品调用
-      removeItem(id){
-        this.$store.commit("remove",id)
+      async removeItem(id){
+      
+     
+          this.$store.commit("remove",id)
+          await this.$request.delete(`/good/${id}/car`)
+        
+       
       },
       // 清空购物车
-      clearcart(){
-        this.$store.commit("clear")
+      async clearcart(){
+         this.$store.commit("clear")
+        await this.$request.delete(`/good/all`)
+      
+       
       }
-
+   }
+   ,
+     mounted() {
+    // 控制菜单显示
+    this.$store.commit("displayTabbar", false);
+  },
+  destroyed() {
+    this.$store.commit("displayTabbar", true);
+  },
+  
+   async created(){
+    let {data}=await this.$request.get("/good/cart")
+     // 调用mutation方法
+        this.$store.commit("GO", data.data);
+     
    }
 }
 </script>

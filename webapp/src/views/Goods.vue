@@ -1,11 +1,6 @@
 <template>
   <div>
-     <van-nav-bar
-        title="购物车"
-        left-text="返回"
-        left-arrow
-        @click-left="onClickLeft"
-/>
+    <van-nav-bar title="购物车" left-text="返回" left-arrow @click-left="onClickLeft" />
     <van-image :src="data.pic" style="height:150px"></van-image>
     <div class="goods-info">
       <h1 style="font-size:12px">{{data.name}}</h1>
@@ -30,10 +25,15 @@
 
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" color="#07c160" />
-      <van-goods-action-icon icon="cart-o" text="购物车" @click="goto('/cart')" :badge="cartlist.length" />
+      <van-goods-action-icon
+        icon="cart-o"
+        text="购物车"
+        @click="goto('/cart')"
+        :badge="cartlist.length"
+      />
       <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
-      <van-goods-action-button type="warning" text="加入购物车" @click="addcart"/>
-      <van-goods-action-button type="danger" text="立即购买"  @click="buyNow" />
+      <van-goods-action-button type="warning" text="加入购物车" @click="addcart" />
+      <van-goods-action-button type="danger" text="立即购买" @click="buyNow" />
     </van-goods-action>
   </div>
 </template>
@@ -54,16 +54,16 @@ export default {
     };
   },
   methods: {
-    buyNow(){
+    buyNow() {
       this.$router.push("/cart");
     },
 
     goto(path) {
       this.$router.push(path);
     },
-    onClickLeft(){
-            this.$router.go(-1)
-        },
+    onClickLeft() {
+      this.$router.go(-1);
+    },
     // 点击推荐替换本页面
     gotoDetail(id) {
       this.goto({
@@ -75,7 +75,7 @@ export default {
     },
     // 获取id对应的数据
     async getdate(id) {
-      let { data } = await this.$request.get("/good/" + id);
+      let { data } = await this.$request.get(`/good/${id}`);
       this.data = data.data;
     },
     //  获取推荐商品数据
@@ -103,11 +103,7 @@ export default {
           }
           
         })
-        // let {data}=await this.$request.get("/good/"+id,{
-        //   params:{
-        //     qty:current.qty+1
-        //   }
-        // })
+      
         console.log("11",data)
         this.$store.commit('changeQty',{_id,qty:current.qty+1})
       }else{
@@ -116,45 +112,37 @@ export default {
           // id:_id,
           params:{
           name:this.data.name,
-          newprice:this.data.promotionPrice,
-          oldprice:this.data.price,
-          imgurl:this.data.pic,
+          promotionPrice:this.data.promotionPrice,
+          pic:this.data.pic,
+          price:this.data.price,
+          checked:this.data.checked,
+          kc:this.data.kc,
           qty:1
           } 
         })
-          // let {data}= await this.$request.get("/good/"+id,{
-          // // id:_id,
-          // params:{
-          // name:this.data.name,
-          // newprice:this.data.promotionPrice,
-          // oldprice:this.data.price,
-          // imgurl:this.data.pic,
-          // qty:1
-          // }
-          //    })
+        
           console.log("12",data)
           const goods = {
           ...this.data,
-          qty:1
-        }
+          qty: 1,
+        };
         // 调用mutation方法
-        this.$store.commit('add',goods);
-      }  
-    }
+        this.$store.commit("add", goods);
+      }
+    },
   },
-  // 
-  computed:{
-    cartlist(){
+  //
+  computed: {
+    cartlist() {
       return this.$store.state.cart.goodslist;
-    }
-  }
-    ,
-   mounted(){
-    // 控制菜单显示
-    this.$store.commit('displayTabbar',false);
+    },
   },
-  destroyed(){
-    this.$store.commit('displayTabbar',true);
+  mounted() {
+    // 控制菜单显示
+    this.$store.commit("displayTabbar", false);
+  },
+  destroyed() {
+    this.$store.commit("displayTabbar", true);
   },
 
   async created() {
