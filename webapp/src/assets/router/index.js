@@ -37,7 +37,14 @@ const routes=[
   {
     path: '/discover',
     name: 'discover',
-    component:()=>import('../../views/Discover.vue')
+    component:()=>import('../../views/Discover.vue'),
+    children:[
+      {
+        path: '/discover-list',
+        name: 'discover-list',
+        component:()=>import('../../views/Discover-module/discover-list.vue'),
+      }
+    ]
   },
   {
     path: '/mine',

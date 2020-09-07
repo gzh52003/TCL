@@ -60,7 +60,10 @@ export default {
         },
         {
           name: "discover",
-          // path: "/discover",
+          path: "/discover",
+          //  components: {
+          //     discover,
+          //   },
           icon: {
             active:
               "http://s0.mall.tcl.com/group1/M00/04/F2/CkgbllvSvqiAN3cYAAAXRI17ylo497.jpg",
@@ -99,9 +102,7 @@ export default {
       ],
     };
   },
-  components: {
-    discover,
-  },
+ 
   computed: {
     showTabbar() {
       return this.$store.state.common.showTabbar;

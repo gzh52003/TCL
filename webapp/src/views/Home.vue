@@ -267,7 +267,7 @@ export default {
     // 跳转到详情页
     goto(id) {
       // this.$router.push(`/good/${id}`);
-      this.$router.push({ name: "Good", params: { id } });
+      this.$router.push({ name: "Goods", params: { id } });
     },
   },
 
