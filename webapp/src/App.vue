@@ -106,6 +106,9 @@ export default {
     showTabbar() {
       return this.$store.state.common.showTabbar;
     },
+      cartLength(){
+      return this.$store.state.cart.goodslist.length
+    },
   },
 
   methods: {
@@ -125,11 +128,7 @@ export default {
    }
   }
   ,
-  computed:{
-    cartLength(){
-      return this.$store.state.cart.goodslist.length
-    },
-  },
+  
 }
 </script>
 <style lang="scss">
