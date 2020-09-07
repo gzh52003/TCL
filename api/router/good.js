@@ -135,7 +135,17 @@ router.get('/list/:id',async(req,res)=>{
         res.send(formatData({code:0}))
     }
 })
-
+// // 获取列表页到详情页数据
+// router.get('/shopcar/:id',async(req,res)=>{
+//     const {id,pic,name,promotionPrice,price,type}=req.params;
+//     console.log("shuju",id,pic,name,promotionPrice,price,type)
+//     try{
+//         const result=await mongo.find("Goods",{_id:id})
+//         res.send(formatData({code:1,data:result}))
+//     }catch(err){
+//         res.send(formatData({code:0}))
+//     }
+// })
 // 添加商品
 router.get("/:id/addshop", async (req, res) => {
     let {id}=req.params
