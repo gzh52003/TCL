@@ -60,6 +60,7 @@ async function update(colName, query, newData) {
 
     if (query._id && typeof query._id === "string") {
         query._id = ObjectId(query._id);
+        console.log( 2211,query._id)
     }
 
     const result = await collection.updateMany(query, newData);

@@ -89,14 +89,51 @@ export default {
       this.recommend = recommend.data;
     },
     // 添加商品进购物车(qty为自定义的统计数量)
-    addcart() {
-      const { _id } = this.data;
-      const current = this.cartlist.filter((item) => item._id === _id)[0];
-      //  判断购物车是否已有该商品，如果是已有，则直接改变数量，没有则新增
-      if (current) {
-        this.$store.commit("changeQty", { _id, qty: current.qty + 1 });
-      } else {
-        const goods = {
+    async addcart(){
+      const {_id} = this.data;
+      let id=_id
+      const current = this.cartlist.filter(item=>item._id === _id)[0]
+    //  判断购物车是否已有该商品，如果是已有，则直接改变数量，没有则新增
+      console.log(current)
+      if(current){
+        let {data}= await this.$request.get(`/good/${id}/addshop`,{
+          // id:_id,
+          params:{
+            qty:current.qty+1
+          }
+          
+        })
+        // let {data}=await this.$request.get("/good/"+id,{
+        //   params:{
+        //     qty:current.qty+1
+        //   }
+        // })
+        console.log("11",data)
+        this.$store.commit('changeQty',{_id,qty:current.qty+1})
+      }else{
+        console.log(this.data)
+         let {data}= await this.$request.get(`/good/${id}/addshop`,{
+          // id:_id,
+          params:{
+          name:this.data.name,
+          newprice:this.data.promotionPrice,
+          oldprice:this.data.price,
+          imgurl:this.data.pic,
+          qty:1
+          } 
+        })
+          // let {data}= await this.$request.get("/good/"+id,{
+          // // id:_id,
+          // params:{
+          // name:this.data.name,
+          // newprice:this.data.promotionPrice,
+          // oldprice:this.data.price,
+          // imgurl:this.data.pic,
+          // qty:1
+          // }
+          //    })
+          console.log("12",data)
+          const goods = {
           ...this.data,
           qty: 1,
         };

@@ -325,7 +325,6 @@ body {
   font-size: 20px;
   height: 255px;
   text-align: center;
-
   img {
     width: 100%;
     height: 100%;
