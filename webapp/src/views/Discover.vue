@@ -8,21 +8,25 @@
         <ul>
           <!-- 选项卡 -->
           <li
-            v-for="(item,idx) in items"
+            v-for="(item,idx) in contentData"
             :key="idx"
-            :class="idx==active?'active':''"
+            :class="idx==active?'discoverActive':''"
             @click="changeMenu(idx)"
           >
-            <img class="classification" v-if="idx==active" :src="publicPath+item.actionsIco" alt />
+            <img
+              class="classification"
+              v-if="idx==active"
+              :src="item.data.data[0].retData.colorIcon"
+              alt
+            />
 
-            <img class="classification" v-else :src="publicPath+item.ico" alt />
-            {{item.text}}
+            <img class="classification" v-else :src="item.data.data[0].retData.icon" alt />
+            {{item.data.data[0].retData.titleName}}
           </li>
         </ul>
       </van-col>
-      <van-col span="19">
-        <discover-list :transfer="contentData"  />
-        
+      <van-col span="19" :style="{height:this.el_height}">
+        <discover-list :transfer="contentData" :transferIdx="active" />
       </van-col>
     </van-row>
   </div>
@@ -61,46 +65,8 @@ export default {
       publicPath: process.env.BASE_URL,
       active: 0,
       //   左侧资料
-
-      contentData: "",
-      
-      items: [
-        {
-          text: "空调",
-          ico: "vue-ico/kontiao-gray.png",
-          actionsIco: "vue-ico/kontiao-red.png",
-        },
-        {
-          text: "电视",
-          ico: "vue-ico/television-gray.png",
-          actionsIco: "vue-ico/television-red.png",
-        },
-        {
-          text: "冰箱",
-          ico: "vue-ico/binxiang-gray.png",
-          actionsIco: "vue-ico/binxiangred.png",
-        },
-        {
-          text: "洗衣机",
-          ico: "vue-ico/washing-gray.png",
-          actionsIco: "vue-ico/washing-red.png",
-        },
-        {
-          text: "健康电器",
-          ico: "vue-ico/Health-gray.png",
-          actionsIco: "vue-ico/Health-red.png",
-        },
-        {
-          text: "智能硬件",
-          ico: "vue-ico/intelligent-gray.png",
-          actionsIco: "vue-ico/intelligent-red.png",
-        },
-        {
-          text: "其他",
-          ico: "vue-ico/other.png",
-          actionsIco: "vue-ico/other-red.png",
-        },
-      ],
+      el_height:null,
+      contentData: [],
     };
   },
   methods: {
@@ -114,7 +80,7 @@ export default {
       console.log(idx);
     },
   },
-   async created() {
+  async created() {
     let idList = [
       "5f522e5752830a33de95b427",
       "5f522e8252830a33de95b42f",
@@ -123,27 +89,31 @@ export default {
       "5f522ece52830a33de95b43d",
       "5f522ee752830a33de95b442",
     ];
-    
-      let {
-        data: { data: result },
-      } = await this.$request.get("good/list/" + idList[0]);
+    let data;
+    idList.forEach(async (item) => {
+      data = await this.$request.get("good/list/" + item);
+      this.contentData.push(data);
+    });
+    console.log("this.contentData=", this.contentData);
+    // let {
+    //   data: { data: result },
+    // } = await this.$request.get("good/list/" + idList[0]);
 
-      // console.log(result[0]);
-      this.contentData=result[0]
-    
-   
+    // console.log(result[0]);
+    // this.contentData=result[0]
   },
   mounted() {
-
+    this.el_height= getComputedStyle(this.$el.lastElementChild).height
   },
 };
 </script>
-<style lang="scss">
+
+<style lang="scss" >
 html,
 body {
   height: 100%;
 }
-.active {
+.discoverActive {
   color: #ff4545 !important;
   background-color: #fff;
   border-left: 2px solid #ff4545;
@@ -197,6 +167,7 @@ body {
     }
     .van-col--19 {
       background-color: #fff;
+      overflow-y: auto;
     }
   }
 }

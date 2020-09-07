@@ -29,9 +29,7 @@
 </template>
 <script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Form} from 'vant';
-
-
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Popup,Icon} from 'vant';
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Notify);
@@ -40,7 +38,9 @@ Vue.use(Button)
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
-Vue.use(Form);
+Vue.use(Popup);
+Vue.use(Icon);
+import discover from './views/Discover'
 export default {
   data() {
     return {
@@ -107,6 +107,9 @@ export default {
     showTabbar() {
       return this.$store.state.common.showTabbar;
     },
+      cartLength(){
+      return this.$store.state.cart.goodslist.length
+    },
   },
 
   methods: {
@@ -120,12 +123,14 @@ export default {
     },
   },
   //跳转路由时收起弹出分类
-  watch: {
-    $route() {
-      this.show = false;
-    },
-  },
-};
+  watch:{
+   '$route'(){
+     this.show=false
+   }
+  }
+  ,
+  
+}
 </script>
 <style lang="scss">
 .van-tabbar-item__icon {
