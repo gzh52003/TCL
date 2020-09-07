@@ -16,6 +16,7 @@
         :key="item.name"
         :to="item.path"
         @click="changeTab(item)"
+        :badge="item.name==='cart'?cartLength:''"
       >
         <template #icon="props">
           <img
@@ -29,7 +30,10 @@
 </template>
 <script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Popup,Icon} from 'vant';
+import discover from "./views/Discover"
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Form,Popup} from 'vant';
+
+
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Notify);
@@ -38,9 +42,8 @@ Vue.use(Button)
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
+Vue.use(Form);
 Vue.use(Popup);
-Vue.use(Icon);
-import discover from './views/Discover'
 export default {
   data() {
     return {
@@ -60,10 +63,7 @@ export default {
         },
         {
           name: "discover",
-          path: "/discover",
-          //  components: {
-          //     discover,
-          //   },
+          // path: "/discover",
           icon: {
             active:
               "http://s0.mall.tcl.com/group1/M00/04/F2/CkgbllvSvqiAN3cYAAAXRI17ylo497.jpg",
@@ -102,13 +102,15 @@ export default {
       ],
     };
   },
- 
+  components:{
+    discover
+  },
   computed: {
-    showTabbar() {
-      return this.$store.state.common.showTabbar;
-    },
       cartLength(){
       return this.$store.state.cart.goodslist.length
+    },
+    showTabbar() {
+      return this.$store.state.common.showTabbar;
     },
   },
 
@@ -123,14 +125,12 @@ export default {
     },
   },
   //跳转路由时收起弹出分类
-  watch:{
-   '$route'(){
-     this.show=false
-   }
-  }
-  ,
-  
-}
+  watch: {
+    $route() {
+      this.show = false;
+    },
+  },
+};
 </script>
 <style lang="scss">
 .van-tabbar-item__icon {

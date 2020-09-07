@@ -37,11 +37,9 @@
                           transfer[transferIdx].data.data[0].retData.titleName)"
       >
         <!-- 自定义原价 -->
-        <template #origin-price>
-          <van-origin-price
-            v-if="transfer[transferIdx].data.data[0].retData.productList[idx].price!==transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice"
-            v-text="' ¥'+transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice"
-          />
+        <template #origin-price
+          v-if="transfer[transferIdx].data.data[0].retData.productList[idx].price!==transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice"
+            v-text="' ¥'+transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice">                 
         </template>
       </van-card>
     </template>
@@ -52,11 +50,13 @@
 
 
 export default {
+  
   props: ["transfer","transferIdx"],
   methods: {
     gotoGoods(id,pic,name,promotionPrice,price,type){
       console.log(111,id,pic,name,promotionPrice,price,type);
-      this.$router.push("/goods",{
+      // this.$router.push({ name: "Goods", params: { id } })
+      this.$router.push({name: "Goods",
         params:{
           id,
           pic,
