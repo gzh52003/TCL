@@ -34,8 +34,8 @@
         @click="gotoDetail(item._id)"
         class="list"
       >
-        <img :src="item.cardImgSrc" />
-        <span class="list-title">{{ item.title }}</span>
+        <img :src="item.pic" />
+        <span class="list-title">{{ item.tit }}</span>
       </van-grid-item>
     </van-grid>
     <!-- 大图 -->
@@ -96,16 +96,16 @@
     <van-swipe indicator-color="#1E90FF" class="goodsswipe">
       <van-swipe-item class="con-left con">
         <li v-for="item in goodsswipe" :key="item._id" @click="goto(item._id)">
-          <img :src="item.cardImgSrc" alt />
-          <p>{{ item.title }}</p>
-          <span>{{ item.price }}</span>
+          <img :src="item.pic" alt />
+          <p>{{ item.name }}</p>
+          <span>{{ item.promotionPrice }}</span>
         </li>
       </van-swipe-item>
       <van-swipe-item class="con-right con">
         <li v-for="item in goodsright" :key="item._id" @click="goto(item._id)">
-          <img :src="item.cardImgSrc" alt />
-          <p>{{ item.title }}</p>
-          <span>{{ item.price }}</span>
+          <img :src="item.pic" alt />
+          <p>{{ item.name }}</p>
+          <span>{{ item.promotionPrice }}</span>
         </li>
       </van-swipe-item>
     </van-swipe>
@@ -267,7 +267,7 @@ export default {
     // 跳转到详情页
     goto(id) {
       // this.$router.push(`/good/${id}`);
-      this.$router.push({ name: "Good", params: { id } });
+      this.$router.push({ name: "Goods", params: { id } });
     },
   },
 
@@ -282,14 +282,14 @@ export default {
     // });
     const { data: list } = await this.$request.get("/good/home", {
       params: {
-        name: "top",
+        type: "top",
       },
     });
     this.goodslist = list.data;
 
     const { data: swipre } = await this.$request.get("/good/home", {
       params: {
-        name: "left",
+        type: "left",
       },
     });
     console.log(swipre.data);
@@ -297,7 +297,7 @@ export default {
 
     const { data: right } = await this.$request.get("/good/home", {
       params: {
-        name: "right",
+        type: "right",
       },
     });
 

@@ -16,6 +16,7 @@
         :key="item.name"
         :to="item.path"
         @click="changeTab(item)"
+        :badge="item.name==='cart'?cartLength:''"
       >
         <template #icon="props">
           <img
@@ -29,7 +30,10 @@
 </template>
 <script>
 import Vue from 'vue'
-import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Popup,Icon} from 'vant';
+import discover from "./views/Discover"
+import {Button,Tabbar, TabbarItem,Tag,NavBar,Notify,Col, Row,Form,Popup} from 'vant';
+
+
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Notify);
@@ -38,9 +42,8 @@ Vue.use(Button)
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Tag);
+Vue.use(Form);
 Vue.use(Popup);
-Vue.use(Icon);
-import discover from './views/Discover'
 export default {
   data() {
     return {
@@ -99,15 +102,15 @@ export default {
       ],
     };
   },
-  components: {
-    discover,
+  components:{
+    discover
   },
   computed: {
-    showTabbar() {
-      return this.$store.state.common.showTabbar;
-    },
       cartLength(){
       return this.$store.state.cart.goodslist.length
+    },
+    showTabbar() {
+      return this.$store.state.common.showTabbar;
     },
   },
 

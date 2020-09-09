@@ -5,8 +5,8 @@ const { formatData } = require("./tools");
 
 // 获取home的商品信息
 router.get("/home", async(req, res) => {
-    let { name } = req.query;
-    const result = await mongo.find("home", { name });
+    let { type } = req.query;
+    const result = await mongo.find("Goods", { type });
     res.send(formatData({ data: result }));
 });
 //获取商品列表有限的数据的jie口
@@ -41,6 +41,15 @@ router.get("/vague", async(req, res) => {
         res.send(formatData({ code: 0 }));
     }
 });
+// 获取cart中的数据
+router.get("/cart", async(req, res) => {
+    try {
+        const result = await mongo.find("cart");
+        res.send(formatData({ data: result }));
+    } catch (err) {
+        res.send(formatData({ code: 0 }));
+    }
+});
 // 获取空调类商品
 router.get("/air", async(req, res) => {
     const { name } = req.query;
@@ -57,7 +66,7 @@ router.get("/:id/kucun", async(req, res) => {
     const { id } = req.params;
 
     // 读取数据库的库存信息
-    const result = await mongo.find("Goods", { _id: id });
+    const result = await mongo.find("cart", { _id: id });
     res.send(formatData({ data: result[0].kc }));
 });
 
@@ -87,7 +96,25 @@ router.put("/:id", async(req, res) => {
         res.send(formatData({ code: 0 }));
     }
 });
-
+// 清空购物车
+router.delete("/all", async(req, res) => {
+    try {
+        const result = await mongo.remove("cart",{});
+        res.send(formatData());
+    } catch (err) {
+        res.send(formatData({ code: 0 }));
+    }
+});
+//删除购物车指定商品数据
+router.delete("/:id/car", async(req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await mongo.remove("cart", { _id: id });
+        res.send(formatData());
+    } catch (err) {
+        res.send(formatData({ code: 0 }));
+    }
+});
 //删除指定商品数据
 router.delete("/:id", async(req, res) => {
     const { id } = req.params;
@@ -98,33 +125,34 @@ router.delete("/:id", async(req, res) => {
         res.send(formatData({ code: 0 }));
     }
 });
-
+// 获取列表页数据
 router.get('/list/:id',async(req,res)=>{
     const {id}=req.params;
     try{
-        const result=await mongo.find("list",{_id:id})
+        const result=await mongo.find("Goods",{_id:id})
         res.send(formatData({code:1,data:result}))
     }catch(err){
         res.send(formatData({code:0}))
     }
 })
+
 // 添加商品
 router.get("/:id/addshop", async (req, res) => {
     let {id}=req.params
-    
-    let {name,tit,newprice,oldprice,imgurl,qty} = req.query;
+    let uuid=id
+    let {name,tit,promotionPrice,price,pic,qty,checked,kc} = req.query;
     let result
-    console.log(id,qty)
+    // console.log(id,qty)
     // 查询商品名是否存在
-    let result1 = await mongo.find("cart",{_id:id})
-    console.log(result1)
+    let result1 = await mongo.find("cart",{uuid})
+    // console.log(result1)
     
     // 大于0存在执行qty+1
     if (result1.length > 0) {
         let newData={qty}
         console.log(newData)
         try{
-        await mongo.update("cart",{_id:id},{$set:newData})
+        await mongo.update("cart",{uuid},{$set:newData})
         console.log("updata")
         res.send(formatData({code:4}))
     }catch(err){
@@ -133,7 +161,7 @@ router.get("/:id/addshop", async (req, res) => {
     } 
     else {
         try {
-            result = await mongo.insert("cart", {name,tit,newprice,oldprice,imgurl,qty})
+            result = await mongo.insert("cart", {name,tit,promotionPrice,price,pic,qty,uuid,kc,checked})
             console.log("insert")
             res.send(formatData())
         } catch{

@@ -75,7 +75,7 @@ export default {
     },
     // 获取id对应的数据
     async getdate(id) {
-      let { data } = await this.$request.get("/good/" + id);
+      let { data } = await this.$request.get(`/good/${id}`);
       this.data = data.data;
     },
     //  获取推荐商品数据
@@ -103,11 +103,7 @@ export default {
           }
           
         })
-        // let {data}=await this.$request.get("/good/"+id,{
-        //   params:{
-        //     qty:current.qty+1
-        //   }
-        // })
+      
         console.log("11",data)
         this.$store.commit('changeQty',{_id,qty:current.qty+1})
       }else{
@@ -116,22 +112,15 @@ export default {
           // id:_id,
           params:{
           name:this.data.name,
-          newprice:this.data.promotionPrice,
-          oldprice:this.data.price,
-          imgurl:this.data.pic,
+          promotionPrice:this.data.promotionPrice,
+          pic:this.data.pic,
+          price:this.data.price,
+          checked:this.data.checked,
+          kc:this.data.kc,
           qty:1
           } 
         })
-          // let {data}= await this.$request.get("/good/"+id,{
-          // // id:_id,
-          // params:{
-          // name:this.data.name,
-          // newprice:this.data.promotionPrice,
-          // oldprice:this.data.price,
-          // imgurl:this.data.pic,
-          // qty:1
-          // }
-          //    })
+        
           console.log("12",data)
           const goods = {
           ...this.data,
