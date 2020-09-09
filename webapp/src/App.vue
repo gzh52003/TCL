@@ -127,8 +127,6 @@ export default {
      this.show=false
    }
   }
-  ,
-  
 }
 </script>
 <style lang="scss">
