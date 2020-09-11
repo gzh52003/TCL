@@ -70,6 +70,7 @@ const routes=[
 
 
 const router = new VueRouter({
+   mode:'history',
   routes
 })
 // 路由权限判断(此处只限制了购物车板块)

@@ -1,24 +1,28 @@
 <template>
-  <div>
+  <div style="background:#fff">
         <van-nav-bar
+        style="padding-bottom:20px;border-bottom:1px solid #ccc"
         title="用户中心"
         left-text="返回"
         left-arrow
         @click-left="onClickLeft"
 />
 
-    <van-form validate-first  style="padding-top:100px" >
+<div style="padding:36px 0;background:#fff">
+  <span style="padding-left:60px;color:#666">短信验证码登录</span>
+  <span style="padding:0px 20px;color:#666">|</span>
+  <span style="color:#666">账号密码登录</span>
+</div>
+    <van-form validate-first  style="" >
       <!-- 用户名通过 validator 进行异步函数校验 -->
       <van-field
         v-model="value1"
-        label="用户名"
         placeholder="请输入用户名"
         :rules="[{validator:asyncValidator, message: '用户名已存在'}]"
       />
       <!-- 通过 pattern 函数校验 -->
       <van-field
         v-model="value2"
-         label="密码"
         placeholder="请输入密码"
       
       />
@@ -108,3 +112,11 @@ export default {
   },
 };
 </script>
+
+<style >
+.van-field{
+  border: 1px solid #ccc!important;
+  width: 90%;
+  margin: 20px auto;
+}
+</style>
