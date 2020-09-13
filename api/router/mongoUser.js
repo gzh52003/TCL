@@ -15,6 +15,7 @@ router.get("/check", async(req, res) => {
     }
 });
 
+
 // 查询返回是一个数组，插入、删除、改都是一堆数据。不能直接用length判断
 router.post("/reg", async(req, res) => {
     let { username, password, gender, age } = req.body;
@@ -29,7 +30,80 @@ router.post("/reg", async(req, res) => {
         res.send(formatData({ code: 2, msg: "注册失败" }));
     }
 });
-// 登录
+// 手机号+验证码登录
+router.post("/loginphone", async(req, res) => {
+    let { username,checked, vcode } = req.body;
+    // console.log(vcode)
+    // console.log(req.session.vcode)
+    if (vcode != req.session.vcode) {
+        res.send(formatData({ code: 3, msg: "验证码错误" }));
+        return;
+    }
+    let result = await mongo.find(
+        "some", { username }, { field: { password: false } }
+    );
+    if (result.length > 0) {
+        // 判断是否勾选免登陆
+        let authorization;
+        if (checked) {
+            // 创建token
+            authorization = token.create({ username }, "148h");
+        } else {
+            authorization = token.create({ username });
+        }
+        result = result[0];
+        result.authorization = authorization;
+        res.send(formatData({ data: result, msg: "登录成功" }));
+    } else {
+        res.send(formatData({ code: 2, msg: "登录失败" }));
+    }
+});
+// 不带验证码登录（纯账号密码）
+router.post("/loginno", async(req, res) => {
+    let { username, password,checked } = req.body;
+    // console.log(vcode)
+    // console.log(req.session.vcode)
+    const hash = crypto.createHash("sha256");
+    hash.update(password + "xiaowei");
+    password = hash.digest("hex");
+    let result = await mongo.find(
+        "some", { username,password }, { field: { password: false } }
+    );
+    if (result.length > 0) {
+        // 判断是否勾选免登陆
+        let authorization;
+        if (checked) {
+            // 创建token
+            authorization = token.create({ username }, "148h");
+        } else {
+            authorization = token.create({ username });
+        }
+        result = result[0];
+        result.authorization = authorization;
+        res.send(formatData({ data: result, msg: "登录成功" }));
+    } else {
+        res.send(formatData({ code: 2, msg: "登录失败" }));
+    }
+});
+// 带验证码的注册
+router.post("/regvcode", async(req, res) => {
+    let { username, password, gender, age,vcode } = req.body;
+    if (vcode != req.session.vcode) {
+        res.send(formatData({ code: 3, msg: "验证码错误" }));
+        return;
+    }
+    const hash = crypto.createHash("sha256");
+    hash.update(password + "xiaowei");
+    password = hash.digest("hex");
+    let result;
+    try {
+        result = await mongo.insert("some", { username, password, gender, age });
+        res.send(formatData({ msg: "注册成功" }));
+    } catch {
+        res.send(formatData({ code: 2, msg: "注册失败" }));
+    }
+});
+// 带验证码登录
 router.post("/login", async(req, res) => {
     let { username, password, checked, vcode } = req.body;
     // console.log(vcode)
@@ -61,15 +135,7 @@ router.post("/login", async(req, res) => {
     }
 });
 
-router.delete("/:id", async(req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await mongo.remove("some", { _id: id });
-        res.send(formatData({ code: 1, msg: "删除成功" }));
-    } catch (err) {
-        res.send(formatData({ code: 2, msg: "删除失败" }));
-    }
-});
+
 
 // router.put('/:id',async (req,res)=>{
 //     const {id} = req.params;
@@ -121,6 +187,15 @@ router.get("/vague", async(req, res) => {
         res.send(formatData({ data: result }));
     } else {
         res.send(formatData());
+    }
+});
+router.delete("/:id", async(req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await mongo.remove("some", { _id: id });
+        res.send(formatData({ code: 1, msg: "删除成功" }));
+    } catch (err) {
+        res.send(formatData({ code: 2, msg: "删除失败" }));
     }
 });
 // 获取单个用户信息

@@ -35,7 +35,7 @@
         class="list"
       >
         <img :src="item.pic" />
-        <span class="list-title">{{ item.tit }}</span>
+        <span class="list-title">{{ item.title}}</span>
       </van-grid-item>
     </van-grid>
     <!-- 大图 -->

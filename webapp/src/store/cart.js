@@ -44,6 +44,7 @@ const cart = {
         // 初始化购物车页面
         GO(state,data){
             state.goodslist = data;
+            console.log(state.goodslist)
         },
         // 修改数量
         changeQty(state,{_id,qty}){
@@ -72,7 +73,7 @@ const cart = {
     actions:{
         // 根据库存数量来判断是否允许更改购物车商品数量
         async changeQtyAsync(context,{_id,qty}){
-            console.log('context=',context);
+            // console.log('context=',context);
             // 发起ajax请求，获取当前商品的库存数量
             // 库存>=qty：允许修改购物车商品数量
             // 库存<qty：不允许增加购物车商品数量

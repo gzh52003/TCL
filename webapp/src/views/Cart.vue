@@ -7,6 +7,7 @@
         @click-left="onClickLeft"
 />
    <van-card
+      :desc="item.adress"
        :price="item.price"
       :title="item.name"
       :thumb="item.pic"
@@ -19,8 +20,8 @@
       </template>
       <template #price>
         <p class="price">
-          <del>{{item.price}}</del>
-          <span style="margin:30px 0">{{item.promotionPrice}}</span>
+          <del>{{item.promotionPrice}}</del>
+          <span style="margin:30px 0">{{item.price}}</span>
           <van-stepper v-model="item.qty" input-width="20px" button-size="20px" theme="round" @change="changeQty(item._id,$event)" />
         </p>
       </template>
@@ -29,11 +30,11 @@
   </template>
    </van-card>
  <van-button size="mini" style="color:red" @click="clearcart" v-show="this.goodslist.length==0 ? false : true">清空购物车</van-button>
-<van-submit-bar :price="totalPrice" button-text="提交订单">
+<van-submit-bar :price="totalPrice" button-text="结算" @submit="onSubmit">
     <van-checkbox v-model="checked">全选</van-checkbox>
-  <template #tip>
+  <!-- <template #tip>
     你的收货地址不支持同城送, <span>修改地址</span>
-  </template>
+  </template> -->
 </van-submit-bar>
   </div>
 </template>
@@ -55,7 +56,7 @@ export default {
   name:'Cart',
   data(){
     return {
-    
+    user:""
     }
   }
   ,
@@ -90,6 +91,16 @@ export default {
   },
   
    methods:{
+    //  结算
+    async onSubmit(){
+      let {data}=await this.$request.get("/good/cart",{params:{userid:this.user}})
+      console.log(data.data)
+      await this.$request.post("/good/listserver",{
+        list:data.data
+      })
+      this.clearcart()
+      this.$router.replace({"name":"steps"})
+    },
     //  数量改变调用
      changeQty(id,qty){
       // this.$store.commit('changeQty',{_id:id,qty})
@@ -105,14 +116,14 @@ export default {
       
      
           this.$store.commit("remove",id)
-          await this.$request.delete(`/good/${id}/car`)
+          await this.$request.delete(`/good/${id}/car`,{params:{userid:this.user}})
         
        
       },
       // 清空购物车
       async clearcart(){
          this.$store.commit("clear")
-        await this.$request.delete(`/good/all`)
+        await this.$request.delete(`/good/all`,{params:{userid:this.user}})
       
        
       }
@@ -127,7 +138,10 @@ export default {
   },
   
    async created(){
-    let {data}=await this.$request.get("/good/cart")
+    let currentUser = localStorage.getItem("currentUser");
+    currentUser = JSON.parse(currentUser);
+    this.user = currentUser._id;
+    let {data}=await this.$request.get("/good/cart",{params:{userid:this.user}})
      // 调用mutation方法
         this.$store.commit("GO", data.data);
      

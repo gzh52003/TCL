@@ -29,12 +29,9 @@
         :origin-price="transfer[transferIdx].data.data[0].retData.productList[idx].price===transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice?'':transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice"
         :title="transfer[transferIdx].data.data[0].retData.productList[idx].productName"
         :thumb="transfer[transferIdx].data.data[0].retData.productList[idx].img"
-        @click="gotoGoods(transfer[transferIdx].data.data[0].retData.productList[idx].uuid,
-                          transfer[transferIdx].data.data[0].retData.productList[idx].img,
-                          transfer[transferIdx].data.data[0].retData.productList[idx].productName,
-                          transfer[transferIdx].data.data[0].retData.productList[idx].price,
-                          transfer[transferIdx].data.data[0].retData.productList[idx].marketPrice,
-                          transfer[transferIdx].data.data[0].retData.titleName)"
+        @click="gotoGoods(
+                          transfer[transferIdx].data.data[0].retData.productList[idx].uuid,
+                          )"
       >
         <!-- 自定义原价 -->
         <template #origin-price
@@ -53,17 +50,12 @@ export default {
   
   props: ["transfer","transferIdx"],
   methods: {
-    gotoGoods(id,pic,name,promotionPrice,price,type){
-      console.log(111,id,pic,name,promotionPrice,price,type);
-      // this.$router.push({ name: "Goods", params: { id } })
+    gotoGoods(id){
+      // console.log(111,id,uuid);
       this.$router.push({name: "Goods",
         params:{
           id,
-          pic,
-          name,
-          promotionPrice,
-          price,
-          type
+          // uuid
         }
       })
     }

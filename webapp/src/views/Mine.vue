@@ -14,7 +14,8 @@
         style="width:100%;height:130px;padding-left:40%;padding-top:20px;color:#fff;"
       >
       <img src="../../public/img/2.png" alt="" class="img1">
-        <div v-show="flag" style="margin-top:78px">
+        <div v-show="flag" style="margin-top:78px;position: relative;
+    left: -55px;">
           <span>欢迎登录：</span>
           <span :name="username">{{username}}</span>
         </div>
