@@ -125,12 +125,12 @@ export default {
     },
   },
   //跳转路由时收起弹出分类
-  watch: {
-    $route() {
-      this.show = false;
-    },
-  },
-};
+  watch:{
+   '$route'(){
+     this.show=false
+   }
+  }
+}
 </script>
 <style lang="scss">
 .van-tabbar-item__icon {
