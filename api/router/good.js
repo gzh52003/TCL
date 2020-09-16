@@ -13,6 +13,24 @@ try{
     res.send(formatData({code:0}))
 }
 })
+// // 带正则匹配的订单数据渲染数据可视化
+// router.get("/regshop", async(req, res) => {
+//     const { name } = req.query;
+//     console.log(name)
+//     let reg = new RegExp(".*" + name + ".*$", "i");
+//     let result1,result2
+
+//         try {
+//              result2= await mongo.find("list",{
+//                 name:reg,
+//                  });
+//                 res.send(formatData({ data: result2 }));
+//         } catch (err) {
+//         res.send(formatData({ code: 0 }));
+//     }
+   
+   
+// });
 // 订单数据
 router.get("/shopdata", async(req, res) => {
     const { page = 1, size = 5 } = req.query;
@@ -111,7 +129,7 @@ router.get("/:id/zuixin", async(req, res) => {
         // console.log("re=",result)
         result=result[0].retData.productList
         result=result.filter(item=>item.uuid===id)
-        // console.log(result[0])
+        console.log(result[0])
        
         res.send(formatData({ data: result[0] }));
     } catch (err) {

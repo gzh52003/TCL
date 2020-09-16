@@ -138,8 +138,9 @@ export default {
     // 获取id对应的数据
     async getdate(id) {
       let { data } = await this.$request.get(`/good/${id}/zuixin`);
+        console.log(data);
       data = data.data;
-      // console.log(data);
+      console.log(data);
       // data=data.filter(item=>item.uuid===id)
       // console.log(data)
       this.data = data;
@@ -177,7 +178,7 @@ export default {
         // console.log("11",data)
         this.$store.commit("changeQty", { uuid, qty: current.qty + 1 });
       } else {
-        // console.log(this.data)
+        console.log(this.data)
         await this.$request.get(`/good/${id}/addshop`, {
           // id:_id,
             params: {
@@ -221,9 +222,13 @@ export default {
   },
 
   async created() {
-    let currentUser = localStorage.getItem("currentUser");
+    try{
+      let currentUser = localStorage.getItem("currentUser");
     currentUser = JSON.parse(currentUser);
     this.user = currentUser._id;
+    }
+    catch(err){console.log(err)}
+    
     // console.log(this.user)
     let { id } = this.$route.params;
     // console.log("id=",id,"uuid=",uuid)

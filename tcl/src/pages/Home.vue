@@ -1,8 +1,11 @@
 <template>
-<div>
-  <div id="main" style="width: 600px;height: 400px;" ref="myEchart"></div>
-  <div id="main2" style="width: 600px;height: 400px;position:absolute;top:100px;right:20px" ref="myEchart2"></div>
-
+  <div>
+    <div id="main" style="width: 600px;height: 400px;" ref="myEchart"></div>
+    <div
+      id="main2"
+      style="width: 600px;height: 400px;position:absolute;top:100px;right:20px"
+      ref="myEchart2"
+    ></div>
   </div>
 </template>
 
@@ -12,86 +15,150 @@
 
 
 <script>
-import '../../node_modules/echarts/map/js/china.js' 
+import "../../node_modules/echarts/map/js/china.js";
 
 export default {
-  methods: {
-    get(){
-      let main=this.$refs.myEchart2
-var mychart = this.$echarts.init(main);
+  // data() {
+  //   return {};
+  // },
+  // async created() {
+  //   let arr = [];
+  //   let dataMany = await this.$request.get("/good/shoppingcar");
+  //   dataMany = dataMany.data.data;
+  //   dataMany = dataMany.map((item) => item.list);
+  //   dataMany = dataMany.map((item) => {
+  //     item.map((ele) => {
+  //       arr.push(ele);
+  //     });
+  //   });
+  //   console.log(arr);
+  //   let name1 = "空调";
+  //   let reg1 = new RegExp(".*" + name1 + ".*$", "i");
+  //   let res1 = arr.filter((item) => {
+  //     return reg1.test(item.name);
+  //   });
+  //   res1=res1.length
+  //   let name2 = "电视";
+  //   let reg2 = new RegExp(".*" + name2 + ".*$", "i");
+  //   let res2 = arr.filter((item) => {
+  //     return reg2.test(item.name);
+  //   });
+  //   res2=res2.length
+  //   let name3 = "冰箱";
+  //   let reg3 = new RegExp(".*" + name3 + ".*$", "i");
+  //   let res3 = arr.filter((item) => {
+  //     return reg3.test(item.name);
+  //   });
+  //   res3=res3.length
+  //   let name4 = "洗衣机";
+  //   let reg4 = new RegExp(".*" + name4 + ".*$", "i");
+  //   let res4 = arr.filter((item) => {
+  //     return reg4.test(item.name);
+  //   });
+  //   res4=res4.length
+  //   let name5 = "健康电器";
+  //   let reg5 = new RegExp(".*" + name5 + ".*$", "i");
+  //   let res5 = arr.filter((item) => {
+  //     return reg5.test(item.name);
+  //   });
+  //   res5=res5.length
+  //   let name6 = "智能硬件";
+  //   let reg6 = new RegExp(".*" + name6 + ".*$", "i");
+  //   let res6 = arr.filter((item) => {
+  //     return reg6.test(item.name);
+  //   });
+  //   res6=res6.length
 
-var option = {
-    title: {
-        text: "商品类别销售占比",
-        // subtext: "纯属虚构",
-        left: "center"
-    },
-    tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c}次 ({d}%)"
-    },
-    legend: {
-        orient: "vertical",
-        left: "50",
-        data: ["空调", "电视", "冰箱", "洗衣机", "健康电器","智能硬件"]
-    },
-    toolbox: {
-        show: true,
-        feature: {
+  //   // let reg3 = new RegExp(".*" + name3 + ".*$", "i");
+  //   // let reg4 = new RegExp(".*" + name4 + ".*$", "i");
+  //   // let reg5 = new RegExp(".*" + name5 + ".*$", "i");
+  //   // let reg6 = new RegExp(".*" + name6 + ".*$", "i");
+
+  //   console.log(res1);
+  //   console.log(res2);
+  //   console.log(res3);
+  //   console.log(res4);
+  //   console.log(res5);
+  //   console.log(res6);
+  //   console.log(dataMany);
+  // },
+  methods: {
+    get() {
+      let main = this.$refs.myEchart2;
+      var mychart = this.$echarts.init(main);
+
+      var option = {
+        title: {
+          text: "商品类别销售占比",
+          // subtext: "纯属虚构",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c}次 ({d}%)",
+        },
+        legend: {
+          orient: "vertical",
+          left: "50",
+          data: ["空调", "电视", "冰箱", "洗衣机", "健康电器", "智能硬件"],
+        },
+        toolbox: {
+          show: true,
+          feature: {
             dataView: {
-                show: true,
-                readOnly: true
+              show: true,
+              readOnly: true,
             },
             restore: {
-                show: true
+              show: true,
             },
             saveAsImage: {
-                show: true
-            }
-        }
-    },
-    series: [
-        {
+              show: true,
+            },
+          },
+        },
+        series: [
+          {
             name: "访问来源",
             type: "pie", // 图例类型是饼图
             radius: "55%", // radius半径 = Math.min(容器的宽度,容器的高度)/2 * radius给出的百分比
             center: ["50%", "60%"], // 圆心的坐标点
             data: [
-                {
-                    value: 335, // 具体的数值
-                    name: "空调" // 每个扇形的代表的数据的名称
-                },
-                {
-                    value: 310,
-                    name: "电视"
-                },
-                {
-                    value: 234,
-                    name: "冰箱"
-                },
-                {
-                    value: 135,
-                    name: "洗衣机"
-                },
-                {
-                    value: 1548,
-                    name: "健康电器"
-                },
-                {
-                    value: 1548,
-                    name: "智能硬件"
-                }
-            ]
-        }
-    ]
-}
+              {
+                value: 335, // 具体的数值
+                name: "空调", // 每个扇形的代表的数据的名称
+              },
+              {
+                value: 310,
+                name: "电视",
+              },
+              {
+                value: 234,
+                name: "冰箱",
+              },
+              {
+                value: 135,
+                name: "洗衣机",
+              },
+              {
+                value: 1548,
+                name: "健康电器",
+              },
+              {
+                value: 1548,
+                name: "智能硬件",
+              },
+            ],
+          },
+        ],
+      };
 
-mychart.setOption(option);
+      mychart.setOption(option);
     },
 
     getdata() {
-      let main = this.$refs.myEchart
-   
+      let main = this.$refs.myEchart;
+
       var mychart = this.$echarts.init(main);
       // var option = {
       //     series:[
@@ -196,10 +263,10 @@ mychart.setOption(option);
       mychart.setOption(option);
     },
   },
-  mounted(){
-    this.getdata()
-    this.get()
-  }
+  mounted() {
+    this.getdata();
+    this.get();
+  },
 };
 </script>
 
