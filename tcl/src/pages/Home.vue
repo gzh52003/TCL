@@ -19,7 +19,9 @@ import "../../node_modules/echarts/map/js/china.js";
 
 export default {
   data() {
-    return {};
+    return {
+      home:"111"
+    };
   },
   // async created() {
   //   let arr = [];
