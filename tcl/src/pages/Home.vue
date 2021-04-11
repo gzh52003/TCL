@@ -18,9 +18,9 @@
 import "../../node_modules/echarts/map/js/china.js";
 
 export default {
-  // data() {
-  //   return {};
-  // },
+  data() {
+    return {};
+  },
   // async created() {
   //   let arr = [];
   //   let dataMany = await this.$request.get("/good/shoppingcar");
