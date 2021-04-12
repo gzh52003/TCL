@@ -21,7 +21,8 @@ export default {
   data() {
     return {
       home:"111",
-      ss:"222"
+      ss:"222",
+      ddd:"222"
     };
   },
   // async created() {
