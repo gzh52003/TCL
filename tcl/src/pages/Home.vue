@@ -20,7 +20,8 @@ import "../../node_modules/echarts/map/js/china.js";
 export default {
   data() {
     return {
-      home:"111"
+      home:"111",
+      ss:"222"
     };
   },
   // async created() {
